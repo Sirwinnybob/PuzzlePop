@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- New photo: a picture with sparkles. Colours come from res/values/icon_colors.xml. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <group>
+        <clip-path android:pathData="M5.7,5.5 H16.3 Q19.5,5.5 19.5,8.7 V16.3 Q19.5,19.5 16.3,19.5 H5.7 Q2.5,19.5 2.5,16.3 V8.7 Q2.5,5.5 5.7,5.5 Z" />
+        <path
+            android:fillColor="@color/icon_sky_light"
+            android:pathData="M5.7,5.5 H16.3 Q19.5,5.5 19.5,8.7 V16.3 Q19.5,19.5 16.3,19.5 H5.7 Q2.5,19.5 2.5,16.3 V8.7 Q2.5,5.5 5.7,5.5 Z" />
+        <path
+            android:fillColor="@color/icon_leaf_light"
+            android:pathData="M-1.46,21.5 a7.7,7.7 0 1,0 15.4,0 a7.7,7.7 0 1,0 -15.4,0 Z" />
+        <path
+            android:fillColor="@color/icon_leaf"
+            android:pathData="M7.08,23.1 a8.68,8.68 0 1,0 17.36,0 a8.68,8.68 0 1,0 -17.36,0 Z" />
+        <path
+            android:fillColor="@color/icon_sun"
+            android:strokeColor="@color/icon_sun_dark"
+            android:strokeWidth="1.2"
+            android:strokeLineCap="round"
+            android:strokeLineJoin="round"
+            android:pathData="M6,11 a2.2,2.2 0 1,0 4.4,0 a2.2,2.2 0 1,0 -4.4,0 Z" />
+    </group>
+    <path
+        android:strokeColor="@color/icon_sky_dark"
+        android:strokeWidth="1.8"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M5.7,5.5 H16.3 Q19.5,5.5 19.5,8.7 V16.3 Q19.5,19.5 16.3,19.5 H5.7 Q2.5,19.5 2.5,16.3 V8.7 Q2.5,5.5 5.7,5.5 Z" />
+    <path
+        android:fillColor="@color/icon_sun"
+        android:strokeColor="@color/icon_sun_dark"
+        android:strokeWidth="1.4"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M19,1.6 Q19.92,4.88 23.2,5.8 Q19.92,6.72 19,10 Q18.08,6.72 14.8,5.8 Q18.08,4.88 19,1.6 Z" />
+    <path
+        android:fillColor="@color/icon_coral"
+        android:strokeColor="@color/icon_coral_dark"
+        android:strokeWidth="1.1"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M3.6,1.8 Q4.08,3.32 5.6,3.8 Q4.08,4.28 3.6,5.8 Q3.12,4.28 1.6,3.8 Q3.12,3.32 3.6,1.8 Z" />
+</vector>

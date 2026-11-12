@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Small puzzle: a few big pieces (2 x 2). Colours come from res/values/icon_colors.xml. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="@color/icon_coral"
+        android:strokeColor="@color/icon_coral_dark"
+        android:strokeWidth="1.2"
+        android:strokeLineJoin="round"
+        android:pathData="M4.40,2.00 H9.00 Q11.40,2.00 11.40,4.40 V9.00 Q11.40,11.40 9.00,11.40 H4.40 Q2.00,11.40 2.00,9.00 V4.40 Q2.00,2.00 4.40,2.00 Z" />
+    <path
+        android:fillColor="@color/icon_sun"
+        android:strokeColor="@color/icon_sun_dark"
+        android:strokeWidth="1.2"
+        android:strokeLineJoin="round"
+        android:pathData="M15.00,2.00 H19.60 Q22.00,2.00 22.00,4.40 V9.00 Q22.00,11.40 19.60,11.40 H15.00 Q12.60,11.40 12.60,9.00 V4.40 Q12.60,2.00 15.00,2.00 Z" />
+    <path
+        android:fillColor="@color/icon_sky"
+        android:strokeColor="@color/icon_sky_dark"
+        android:strokeWidth="1.2"
+        android:strokeLineJoin="round"
+        android:pathData="M4.40,12.60 H9.00 Q11.40,12.60 11.40,15.00 V19.60 Q11.40,22.00 9.00,22.00 H4.40 Q2.00,22.00 2.00,19.60 V15.00 Q2.00,12.60 4.40,12.60 Z" />
+    <path
+        android:fillColor="@color/icon_leaf"
+        android:strokeColor="@color/icon_leaf_dark"
+        android:strokeWidth="1.2"
+        android:strokeLineJoin="round"
+        android:pathData="M15.00,12.60 H19.60 Q22.00,12.60 22.00,15.00 V19.60 Q22.00,22.00 19.60,22.00 H15.00 Q12.60,22.00 12.60,19.60 V15.00 Q12.60,12.60 15.00,12.60 Z" />
+</vector>

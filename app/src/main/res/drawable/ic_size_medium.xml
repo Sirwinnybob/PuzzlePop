@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Medium puzzle: nine pieces (3 x 3). Colours come from res/values/icon_colors.xml. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="@color/icon_coral"
+        android:strokeColor="@color/icon_coral_dark"
+        android:strokeWidth="1.0"
+        android:strokeLineJoin="round"
+        android:pathData="M3.76,2.00 H6.11 Q7.87,2.00 7.87,3.76 V6.11 Q7.87,7.87 6.11,7.87 H3.76 Q2.00,7.87 2.00,6.11 V3.76 Q2.00,2.00 3.76,2.00 Z" />
+    <path
+        android:fillColor="@color/icon_sun"
+        android:strokeColor="@color/icon_sun_dark"
+        android:strokeWidth="1.0"
+        android:strokeLineJoin="round"
+        android:pathData="M10.83,2.00 H13.17 Q14.93,2.00 14.93,3.76 V6.11 Q14.93,7.87 13.17,7.87 H10.83 Q9.07,7.87 9.07,6.11 V3.76 Q9.07,2.00 10.83,2.00 Z" />
+    <path
+        android:fillColor="@color/icon_sky"
+        android:strokeColor="@color/icon_sky_dark"
+        android:strokeWidth="1.0"
+        android:strokeLineJoin="round"
+        android:pathData="M17.89,2.00 H20.24 Q22.00,2.00 22.00,3.76 V6.11 Q22.00,7.87 20.24,7.87 H17.89 Q16.13,7.87 16.13,6.11 V3.76 Q16.13,2.00 17.89,2.00 Z" />
+    <path
+        android:fillColor="@color/icon_sun"
+        android:strokeColor="@color/icon_sun_dark"
+        android:strokeWidth="1.0"
+        android:strokeLineJoin="round"
+        android:pathData="M3.76,9.07 H6.11 Q7.87,9.07 7.87,10.83 V13.17 Q7.87,14.93 6.11,14.93 H3.76 Q2.00,14.93 2.00,13.17 V10.83 Q2.00,9.07 3.76,9.07 Z" />
+    <path
+        android:fillColor="@color/icon_sky"
+        android:strokeColor="@color/icon_sky_dark"
+        android:strokeWidth="1.0"
+        android:strokeLineJoin="round"
+        android:pathData="M10.83,9.07 H13.17 Q14.93,9.07 14.93,10.83 V13.17 Q14.93,14.93 13.17,14.93 H10.83 Q9.07,14.93 9.07,13.17 V10.83 Q9.07,9.07 10.83,9.07 Z" />
+    <path
+        android:fillColor="@color/icon_leaf"
+        android:strokeColor="@color/icon_leaf_dark"
+        android:strokeWidth="1.0"
+        android:strokeLineJoin="round"
+        android:pathData="M17.89,9.07 H20.24 Q22.00,9.07 22.00,10.83 V13.17 Q22.00,14.93 20.24,14.93 H17.89 Q16.13,14.93 16.13,13.17 V10.83 Q16.13,9.07 17.89,9.07 Z" />
+    <path
+        android:fillColor="@color/icon_sky"
+        android:strokeColor="@color/icon_sky_dark"
+        android:strokeWidth="1.0"
+        android:strokeLineJoin="round"
+        android:pathData="M3.76,16.13 H6.11 Q7.87,16.13 7.87,17.89 V20.24 Q7.87,22.00 6.11,22.00 H3.76 Q2.00,22.00 2.00,20.24 V17.89 Q2.00,16.13 3.76,16.13 Z" />
+    <path
+        android:fillColor="@color/icon_leaf"
+        android:strokeColor="@color/icon_leaf_dark"
+        android:strokeWidth="1.0"
+        android:strokeLineJoin="round"
+        android:pathData="M10.83,16.13 H13.17 Q14.93,16.13 14.93,17.89 V20.24 Q14.93,22.00 13.17,22.00 H10.83 Q9.07,22.00 9.07,20.24 V17.89 Q9.07,16.13 10.83,16.13 Z" />
+    <path
+        android:fillColor="@color/icon_grape"
+        android:strokeColor="@color/icon_grape_dark"
+        android:strokeWidth="1.0"
+        android:strokeLineJoin="round"
+        android:pathData="M17.89,16.13 H20.24 Q22.00,16.13 22.00,17.89 V20.24 Q22.00,22.00 20.24,22.00 H17.89 Q16.13,22.00 16.13,20.24 V17.89 Q16.13,16.13 17.89,16.13 Z" />
+</vector>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Window background shown before Compose draws. Must match `background` in ui/theme/Theme.kt. -->
+<resources>
+    <color name="window_background">#FAF8FC</color>
+</resources>

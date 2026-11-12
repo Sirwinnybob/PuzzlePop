@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Favorite off: a hollow heart waiting to be filled. Colours come from res/values/icon_colors.xml. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="@color/icon_coral_light"
+        android:strokeColor="@color/icon_coral_dark"
+        android:strokeWidth="1.8"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M12,20.8 C5.2,15.4 2.6,11.8 2.6,8.4 C2.6,5.6 4.8,3.6 7.2,3.6 C9.2,3.6 10.9,4.6 12,6.4 C13.1,4.6 14.8,3.6 16.8,3.6 C19.2,3.6 21.4,5.6 21.4,8.4 C21.4,11.8 18.8,15.4 12,20.8 Z" />
+    <path
+        android:strokeColor="@color/icon_white"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:strokeAlpha="0.9"
+        android:pathData="M5.2,8.6 Q5.2,6.6 7.2,6.2" />
+</vector>

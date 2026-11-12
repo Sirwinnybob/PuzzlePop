@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Break / all done: a sleepy crescent moon with stars. Colours come from res/values/icon_colors.xml. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+    <path
+        android:fillColor="@color/icon_sun"
+        android:strokeColor="@color/icon_sun_dark"
+        android:strokeWidth="3.5"
+        android:strokeLineJoin="round"
+        android:pathData="M55.3,26 A38,38 0 1,0 90.8,79.2 A32,32 0 0,1 55.3,26 Z" />
+    <path
+        android:strokeColor="@color/icon_white"
+        android:strokeWidth="3"
+        android:strokeLineCap="round"
+        android:strokeAlpha="0.8"
+        android:pathData="M30,52 Q33,44 40,40" />
+    <path
+        android:strokeColor="@color/icon_ink"
+        android:strokeWidth="3"
+        android:strokeLineCap="round"
+        android:pathData="M34,76 Q39,81 44,76 M54,88 Q59,93 64,88" />
+    <path
+        android:strokeColor="@color/icon_ink"
+        android:strokeWidth="3"
+        android:strokeLineCap="round"
+        android:pathData="M42,94 Q48,98 54,95" />
+    <path
+        android:fillColor="@color/icon_blush"
+        android:fillAlpha="0.85"
+        android:pathData="M25,86 a5,3.5 0 1,0 10,0 a5,3.5 0 1,0 -10,0 Z" />
+    <path
+        android:fillColor="@color/icon_blush"
+        android:fillAlpha="0.85"
+        android:pathData="M62,98 a5,3.5 0 1,0 10,0 a5,3.5 0 1,0 -10,0 Z" />
+    <path
+        android:fillColor="@color/icon_grape"
+        android:strokeColor="@color/icon_grape_dark"
+        android:strokeWidth="2.5"
+        android:strokeLineJoin="round"
+        android:pathData="M92,16 L96,26 L106,27 L98.5,34 L100.5,44 L92,39 L83.5,44 L85.5,34 L78,27 L88,26 Z" />
+    <path
+        android:fillColor="@color/icon_sky"
+        android:strokeColor="@color/icon_sky_dark"
+        android:strokeWidth="2"
+        android:strokeLineJoin="round"
+        android:pathData="M100,56 L102.5,62 L108.5,62.6 L104,66.6 L105.4,72.6 L100,69.4 L94.6,72.6 L96,66.6 L91.5,62.6 L97.5,62 Z" />
+    <path
+        android:fillColor="@color/icon_coral"
+        android:pathData="M72,14 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0 Z" />
+    <path
+        android:fillColor="@color/icon_leaf"
+        android:pathData="M104,86 a3.5,3.5 0 1,0 7,0 a3.5,3.5 0 1,0 -7,0 Z" />
+</vector>

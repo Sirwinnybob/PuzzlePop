@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Dark-surface overrides for the icon palette. Fills stay as bright as in light mode; only the outline
+  shades are lifted so an icon's edge still reads against a near-black background.
+-->
+<resources>
+    <color name="icon_coral_dark">#E8584F</color>
+    <color name="icon_sun_dark">#F2A41A</color>
+    <color name="icon_sky_dark">#3E9BEA</color>
+    <color name="icon_leaf_dark">#43B05C</color>
+    <color name="icon_grape_dark">#8A5CE0</color>
+    <color name="icon_teal_dark">#2BAFA3</color>
+    <color name="icon_pink_dark">#E8528F</color>
+    <color name="icon_indigo_dark">#6674E0</color>
+</resources>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!-- Where the camera app writes the photo it takes for us; cleared after each import. -->
+    <cache-path name="camera" path="camera/" />
+</paths>

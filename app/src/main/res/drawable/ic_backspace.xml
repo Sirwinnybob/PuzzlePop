@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Backspace: a tag pointing left with a cross. Colours come from res/values/icon_colors.xml. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="@color/icon_sky_light"
+        android:strokeColor="@color/icon_sky_dark"
+        android:strokeWidth="1.8"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M9,5 H19 Q21,5 21,7 V17 Q21,19 19,19 H9 Q8,19 7.3,18.2 L2.7,12.8 Q2.2,12 2.7,11.2 L7.3,5.8 Q8,5 9,5 Z" />
+    <path
+        android:strokeColor="@color/icon_coral"
+        android:strokeWidth="2.2"
+        android:strokeLineCap="round"
+        android:pathData="M10.6,9.6 L16.4,14.4 M16.4,9.6 L10.6,14.4" />
+</vector>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Launcher icon foreground ("Pop!"): a 2x2 puzzle with the purple mascot piece popping out of its slot. Generated; kept inside the 66dp safe zone. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path android:fillColor="#2A6FA8" android:fillAlpha="0.28" android:pathData="M54.00,54.00 L61.36,54.00 A3.31,3.31 0.0 1,0 66.13,54.00 L73.49,54.00 L73.49,68.44 A5.05,5.05 0.0 0,1 68.44,73.49 L54.00,73.49 L54.00,66.13 A3.31,3.31 0.0 1,1 54.00,61.36 L54.00,54.00 Z" />
+    <path android:strokeColor="#D2403A" android:strokeWidth="1.59" android:strokeLineJoin="round" android:fillColor="#FF6F61" android:pathData="M39.56,34.51 L54.00,34.51 L54.00,41.87 A3.31,3.31 0.0 1,1 54.00,46.64 L54.00,54.00 L46.64,54.00 A3.31,3.31 0.0 1,0 41.87,54.00 L34.51,54.00 L34.51,39.56 A5.05,5.05 0.0 0,1 39.56,34.51 Z" />
+    <path android:strokeColor="#E38F00" android:strokeWidth="1.59" android:strokeLineJoin="round" android:fillColor="#FFD23F" android:pathData="M54.00,34.51 L68.44,34.51 A5.05,5.05 0.0 0,1 73.49,39.56 L73.49,54.00 L66.13,54.00 A3.31,3.31 0.0 1,1 61.36,54.00 L54.00,54.00 L54.00,46.64 A3.31,3.31 0.0 1,0 54.00,41.87 L54.00,34.51 Z" />
+    <path android:strokeColor="#2C9544" android:strokeWidth="1.59" android:strokeLineJoin="round" android:fillColor="#5BD16A" android:pathData="M34.51,54.00 L41.87,54.00 A3.31,3.31 0.0 1,1 46.64,54.00 L54.00,54.00 L54.00,61.36 A3.31,3.31 0.0 1,0 54.00,66.13 L54.00,73.49 L39.56,73.49 A5.05,5.05 0.0 0,1 34.51,68.44 L34.51,54.00 Z" />
+    <path android:fillColor="#1B5E96" android:fillAlpha="0.25" android:pathData="M62.32,58.28 L69.46,60.06 A3.31,3.31 14.0 1,0 74.09,61.21 L81.23,62.99 L77.74,77.00 A5.05,5.05 14.0 0,1 71.61,80.69 L57.60,77.19 L59.38,70.05 A3.31,3.31 14.0 1,1 60.53,65.42 L62.32,58.28 Z" />
+    <path android:strokeColor="#6B3FC2" android:strokeWidth="1.73" android:strokeLineJoin="round" android:fillColor="#A472F2" android:pathData="M61.70,56.26 L68.85,58.05 A3.31,3.31 14.0 1,0 73.47,59.20 L80.62,60.98 L77.12,74.99 A5.05,5.05 14.0 0,1 71.00,78.67 L56.99,75.18 L58.77,68.03 A3.31,3.31 14.0 1,1 59.92,63.41 L61.70,56.26 Z" />
+    <path android:fillColor="#4A3366" android:pathData="M64.88,66.90 A0.97,0.97 14.0 1,0 66.77,67.37 A0.97,0.97 14.0 1,0 64.88,66.90 Z" />
+    <path android:fillColor="#4A3366" android:pathData="M70.93,68.41 A0.97,0.97 14.0 1,0 72.82,68.88 A0.97,0.97 14.0 1,0 70.93,68.41 Z" />
+    <path android:strokeColor="#4A3366" android:strokeWidth="1.17" android:strokeLineJoin="round" android:strokeLineCap="round" android:pathData="M65.97,69.78 Q67.48,73.38 70.51,70.92" />
+    <path android:fillColor="#FF8FA3" android:fillAlpha="0.85" android:pathData="M61.19,69.20 A1.46,1.46 14.0 1,0 64.03,69.90 A1.46,1.46 14.0 1,0 61.19,69.20 Z" />
+    <path android:fillColor="#FF8FA3" android:fillAlpha="0.85" android:pathData="M72.16,71.93 A1.46,1.46 14.0 1,0 75.00,72.64 A1.46,1.46 14.0 1,0 72.16,71.93 Z" />
+    <path android:strokeColor="#FFFFFF" android:strokeWidth="1.17" android:strokeLineJoin="round" android:strokeAlpha="0.8" android:strokeLineCap="round" android:pathData="M72.67,62.21 Q75.70,62.97 76.18,65.90" />
+    <path android:fillColor="#FFFFFF" android:pathData="M77.83,45.34 Q78.48,48.30 81.44,48.95 Q78.48,49.60 77.83,52.56 Q77.18,49.60 74.22,48.95 Q77.18,48.30 77.83,45.34 Z" />
+    <path android:fillColor="#FFFFFF" android:pathData="M73.49,39.70 Q73.86,41.36 75.52,41.73 Q73.86,42.09 73.49,43.75 Q73.13,42.09 71.47,41.73 Q73.13,41.36 73.49,39.70 Z" />
+    <path android:fillColor="#FFFFFF" android:pathData="M48.95,75.52 Q49.36,77.41 51.26,77.83 Q49.36,78.24 48.95,80.14 Q48.53,78.24 46.64,77.83 Q48.53,77.41 48.95,75.52 Z" />
+</vector>

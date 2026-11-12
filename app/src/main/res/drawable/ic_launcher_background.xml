@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Launcher icon background: a soft sky-blue gradient with a few light bubbles. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path android:pathData="M0,0h108v108h-108z">
+        <aapt:attr name="android:fillColor" xmlns:aapt="http://schemas.android.com/aapt">
+            <gradient
+                android:startX="0" android:startY="0"
+                android:endX="108" android:endY="108"
+                android:type="linear">
+                <item android:color="#CBEAFF" android:offset="0.0" />
+                <item android:color="#7CC8FF" android:offset="1.0" />
+            </gradient>
+        </aapt:attr>
+    </path>
+    <path android:fillColor="#FFFFFF" android:fillAlpha="0.35"
+        android:pathData="M19,80 a9,9 0 1,0 18,0 a9,9 0 1,0 -18,0 Z" />
+    <path android:fillColor="#FFFFFF" android:fillAlpha="0.4"
+        android:pathData="M74,27 a6,6 0 1,0 12,0 a6,6 0 1,0 -12,0 Z" />
+    <path android:fillColor="#FFFFFF" android:fillAlpha="0.3"
+        android:pathData="M80,84 a4,4 0 1,0 8,0 a4,4 0 1,0 -8,0 Z" />
+</vector>

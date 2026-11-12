@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Colours: a round palette split into five colour wedges. Colours come from res/values/icon_colors.xml. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path android:fillColor="@color/icon_coral" android:pathData="M12,12 L12,2.5 A9.5,9.5 0 0,1 21.04,9.07 Z" />
+    <path android:fillColor="@color/icon_sun" android:pathData="M12,12 L21.04,9.07 A9.5,9.5 0 0,1 17.59,19.7 Z" />
+    <path android:fillColor="@color/icon_leaf" android:pathData="M12,12 L17.59,19.7 A9.5,9.5 0 0,1 6.41,19.7 Z" />
+    <path android:fillColor="@color/icon_sky" android:pathData="M12,12 L6.41,19.7 A9.5,9.5 0 0,1 2.96,9.07 Z" />
+    <path android:fillColor="@color/icon_grape" android:pathData="M12,12 L2.96,9.07 A9.5,9.5 0 0,1 12,2.5 Z" />
+    <path
+        android:strokeColor="@color/icon_ink"
+        android:strokeWidth="1.0"
+        android:pathData="M12,2.5 A9.5,9.5 0 1,1 11.99,2.5 Z" />
+</vector>

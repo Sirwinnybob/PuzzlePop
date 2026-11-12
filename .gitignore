@@ -1,0 +1,36 @@
+# Gradle / build outputs
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+.kotlin/
+*.apk
+*.aab
+
+# Android
+local.properties
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Signing keys
+*.jks
+*.keystore
+keystore.properties
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Hand-off builds copied by hand
+dist/
+
+# Emulator screenshots
+screenshots/
+
+# Agent workspace
+.superpowers/

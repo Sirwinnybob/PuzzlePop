@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Classic pieces: neat necks, like a real puzzle. Colours come from res/values/icon_colors.xml. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="@color/icon_sky"
+        android:strokeColor="@color/icon_sky_dark"
+        android:strokeWidth="1.8"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M6.1,5.4 H8.93 A1.9,1.9 0 1,1 11.33,5.4 H17.3 A1.7,1.7 0 0,1 19,7.1 V10.38 A1.9,1.9 0 1,0 19,12.78 V18.9 A1.7,1.7 0 0,1 17.3,20.6 H11.33 A1.9,1.9 0 1,0 8.93,20.6 H6.1 A1.7,1.7 0 0,1 4.4,18.9 V12.78 A1.9,1.9 0 1,1 4.4,10.38 V7.1 A1.7,1.7 0 0,1 6.1,5.4 Z" />
+    <path
+        android:strokeColor="@color/icon_white"
+        android:strokeWidth="1.3"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:strokeAlpha="0.8"
+        android:pathData="M8,9.8 H10" />
+</vector>

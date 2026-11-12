@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Palette for the custom icon set (res/drawable/ic_*.xml). Every icon is built from these.
+  Each hue comes as: base fill, a darker "ink" shade for outlines, and a light tint for highlights/soft fills.
+  Tune colours here and every icon follows. values-night/ overrides the outline shades for dark surfaces.
+-->
+<resources>
+    <color name="icon_coral">#FF6F61</color>
+    <color name="icon_coral_dark">#D2403A</color>
+    <color name="icon_coral_light">#FFC4BA</color>
+
+    <color name="icon_sun">#FFD23F</color>
+    <color name="icon_sun_dark">#E38F00</color>
+    <color name="icon_sun_light">#FFF1A8</color>
+
+    <color name="icon_sky">#4DB8FF</color>
+    <color name="icon_sky_dark">#1B7DD1</color>
+    <color name="icon_sky_light">#CBEAFF</color>
+
+    <color name="icon_leaf">#5BD16A</color>
+    <color name="icon_leaf_dark">#2C9544</color>
+    <color name="icon_leaf_light">#C6F3C6</color>
+
+    <color name="icon_grape">#A472F2</color>
+    <color name="icon_grape_dark">#6B3FC2</color>
+    <color name="icon_grape_light">#DECDFB</color>
+
+    <color name="icon_teal">#2EC4B6</color>
+    <color name="icon_teal_dark">#168A80</color>
+
+    <color name="icon_pink">#FF5FA2</color>
+    <color name="icon_pink_dark">#C93273</color>
+
+    <color name="icon_indigo">#6C7BF5</color>
+    <color name="icon_indigo_dark">#3F4DC4</color>
+
+    <!-- Faces and pupils -->
+    <color name="icon_ink">#4A3366</color>
+    <color name="icon_blush">#FF8FA3</color>
+    <color name="icon_white">#FFFFFF</color>
+</resources>
