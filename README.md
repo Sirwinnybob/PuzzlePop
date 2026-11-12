@@ -1,7 +1,7 @@
 # PuzzlePop
 
-An Android jigsaw puzzle app that turns your own photos into puzzles. I built it
-for my kid, so it has a locked-down kid mode with time limits, but it goes up to
+An Android jigsaw puzzle app that turns your own photos into puzzles. I had Claude build it
+for my kids, so it has a locked-down kid mode with time limits, but it goes up to
 1000 pieces for adults too.
 
 No ads, no accounts, no analytics. The app doesn't even request the internet
