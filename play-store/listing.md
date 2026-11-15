@@ -118,3 +118,7 @@ this was written with machine help; have a native speaker check it before you pu
    Check each one for notifications before using it.
 4. Render the icon: `magick -background none -density 900 <(sed 's/viewBox="0 0 108 108"/viewBox="17 17 74 74"/' tools/launcher-icon/preview.svg) -resize 512x512 -depth 8 icon-512.png`
 5. Run `python3 -I tools/store_art.py raw play-store` to frame the screenshots and build the feature graphic.
+   For tablet shots it also cuts off Samsung's taskbar and inpaints the floating S Pen button and edge-panel
+   handle (needs `python3-opencv`).
+
+Upload `phone-*.png` as phone screenshots and `tablet-*.png` as both 7-inch and 10-inch tablet screenshots.

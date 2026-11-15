@@ -808,7 +808,15 @@ class PlayViewModel(
     /** Debug builds only: the first use solves the top half, the next all but one (see the play toolbar). */
     fun debugSolveStep() {
         val g = gameRef ?: return
-        if (g.placedCount < g.layout.pieces.size / 2) debugSolveTopHalf() else debugSolveAllButOne()
+        val top = topHalfPieces()
+        if (top.all { g.isLocked(it) }) debugSolveAllButOne() else debugSolveTopHalf()
+    }
+
+    /** The pieces whose home is above the picture's middle row. */
+    private fun topHalfPieces(): List<Int> {
+        val pieces = gameRef?.layout?.pieces ?: return emptyList()
+        val middle = pieces.map { it.bounds.top }.sorted().let { it[it.size / 2] }
+        return pieces.indices.filter { pieces[it].bounds.top < middle }
     }
 
     /** Debug builds only: locks every piece except one group, so the last drop can be tested by hand. */
@@ -826,10 +834,8 @@ class PlayViewModel(
     /** Debug builds only: locks the top half of the picture, so a puzzle looks well under way (store screenshots). */
     fun debugSolveTopHalf() {
         if (!BuildConfig.DEBUG) return
-        val g = gameRef ?: return
-        val pieces = g.layout.pieces
-        val middle = pieces.map { it.bounds.top }.sorted().let { it[it.size / 2] }
-        debugLock { id -> pieces[id].bounds.top < middle }
+        val top = topHalfPieces().toSet()
+        debugLock { id -> id in top }
     }
 
     /** Moves each unlocked piece that [which] picks to its home and drops it there. */

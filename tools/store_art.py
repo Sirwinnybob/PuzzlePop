@@ -36,8 +36,8 @@ CAPTIONS = {
         ("tablet_sheet.png", "10 to 1000 pieces, eight piece shapes"),
         ("tablet_library.png", "Pick up right where you left off"),
         ("tablet_finish.png", "A big celebration for every finished puzzle"),
-        ("tablet_kid_home.png", "Kid mode with time limits and a grown-up lock"),
-        ("tablet_settings.png", "No ads, no accounts, nothing leaves the device"),
+        ("tablet_kid_home.png", "Kid mode: big pictures and nothing else to tap"),
+        ("tablet_settings.png", "Play-time limits, behind a grown-up PIN"),
     ],
 }
 CANVAS = {"phone": (1920, 1080), "tablet": (2560, 1600)}
@@ -75,15 +75,44 @@ def paste_with_shadow(canvas, shot, xy, radius):
 
 
 def status_bar_height(img):
-    """The system status bar takes about 4% of a landscape screenshot's height; it is cut off."""
-    return round(img.height * 0.085) if img.height < img.width * 0.5 else round(img.height * 0.045)
+    """The system status bar at the top of a landscape screenshot; it is cut off."""
+    return round(img.height * 0.085) if is_phone(img) else round(img.height * 0.045)
+
+
+def is_phone(img):
+    return img.height < img.width * 0.5
+
+
+def hide_samsung_overlays(img):
+    """Inpaints the floating S Pen button (left edge) and the edge-panel handle (right edge) that Samsung
+    tablets draw over every app. Positions are for a 2800x1752 Tab S7+/S8+ screenshot, scaled to others.
+    Needs OpenCV (python3-opencv); without it the overlays are left as they are."""
+    try:
+        import cv2
+        import numpy as np
+    except ImportError:
+        return img
+    w, h = img.size
+    sx, sy = w / 2800, h / 1752
+    mask = np.zeros((h, w), np.uint8)
+    cv2.circle(mask, (round(30 * sx), round(355 * sy)), round(46 * sx), 255, -1)
+    cv2.rectangle(mask, (round(2780 * sx), round(236 * sy)), (w - 1, round(422 * sy)), 255, -1)
+    fixed = cv2.inpaint(np.array(img)[:, :, ::-1], mask, 7, cv2.INPAINT_TELEA)
+    return Image.fromarray(fixed[:, :, ::-1])
+
+
+def bottom_cut(img):
+    """Samsung tablets show a taskbar of app icons along the bottom; that strip is cut off too."""
+    return 0 if is_phone(img) else round(img.height * 0.07)
 
 
 def frame(raw_path, caption, size):
     w, h = size
     canvas = sky(size).convert("RGBA")
     shot = Image.open(raw_path).convert("RGB")
-    shot = shot.crop((0, status_bar_height(shot), shot.width, shot.height))
+    if not is_phone(shot):
+        shot = hide_samsung_overlays(shot)
+    shot = shot.crop((0, status_bar_height(shot), shot.width, shot.height - bottom_cut(shot)))
     caption_h = round(h * 0.2)
     margin = round(w * 0.045)
     max_w, max_h = w - 2 * margin, h - caption_h - margin
@@ -91,7 +120,11 @@ def frame(raw_path, caption, size):
     shot = shot.resize((round(shot.width * scale), round(shot.height * scale)), Image.LANCZOS)
     paste_with_shadow(canvas, shot, ((w - shot.width) // 2, caption_h), round(h * 0.03))
     draw = ImageDraw.Draw(canvas)
-    font = ImageFont.truetype(FONT_BOLD, round(h * 0.07))
+    size_px = round(h * 0.07)
+    font = ImageFont.truetype(FONT_BOLD, size_px)
+    while draw.textlength(caption, font=font) > w * 0.92:  # long captions shrink to fit
+        size_px -= 4
+        font = ImageFont.truetype(FONT_BOLD, size_px)
     tw = draw.textlength(caption, font=font)
     draw.text(((w - tw) / 2, caption_h * 0.5), caption, font=font, fill=INK, anchor="lm")
     return canvas.convert("RGB")
