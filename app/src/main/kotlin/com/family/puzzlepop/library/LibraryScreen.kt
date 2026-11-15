@@ -148,9 +148,14 @@ fun LibraryScreen(onOpenPuzzle: (String) -> Unit, onStartKidMode: () -> Unit, on
         }
     }
     val hasCamera = remember {
-        context.packageManager
-            .queryIntentActivities(Intent(MediaStore.ACTION_IMAGE_CAPTURE), PackageManager.ResolveInfoFlags.of(0))
-            .isNotEmpty()
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        val pm = context.packageManager
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            pm.queryIntentActivities(intent, PackageManager.ResolveInfoFlags.of(0)).isNotEmpty()
+        } else {
+            @Suppress("DEPRECATION")
+            pm.queryIntentActivities(intent, 0).isNotEmpty()
+        }
     }
     val pickFromGallery = {
         picker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))

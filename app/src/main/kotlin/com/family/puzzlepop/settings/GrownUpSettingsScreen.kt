@@ -69,7 +69,7 @@ import kotlinx.coroutines.launch
  */
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
-fun GrownUpSettingsScreen(onDone: () -> Unit, onSpeedTest: () -> Unit = {}) {
+fun GrownUpSettingsScreen(onDone: () -> Unit, onSpeedTest: () -> Unit = {}, onAbout: () -> Unit = {}) {
     val container = (LocalContext.current.applicationContext as PuzzlePopApp).container
     val repo = container.settings
     val scope = rememberCoroutineScope()
@@ -182,6 +182,12 @@ fun GrownUpSettingsScreen(onDone: () -> Unit, onSpeedTest: () -> Unit = {}) {
                 timeCard()
                 kidCard()
                 securityCard()
+            }
+
+            SectionCard {
+                FilledTonalButton(onClick = onAbout, modifier = Modifier.fillMaxWidth().heightIn(min = 60.dp)) {
+                    Text(stringResource(R.string.settings_about), fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                }
             }
 
             if (titleTaps >= 7) {
@@ -341,13 +347,12 @@ private fun StepperControl(value: Int, range: IntRange, step: Int, format: @Comp
     }
 }
 
-/** App language: English or Korean. Uses the system per-app locale, which also restarts the screen to apply it. */
+/** App language: English or Korean. Switching restarts the screen to apply it (see [AppLanguage]). */
 @Composable
 private fun LanguageRow() {
     val context = LocalContext.current
-    val lm = context.getSystemService(android.app.LocaleManager::class.java)
-    val current = lm.applicationLocales.takeIf { !it.isEmpty }?.get(0)?.language
-        ?: context.resources.configuration.locales[0].language
+    val activity = checkNotNull(LocalActivity.current)
+    val current = AppLanguage.current(context)
     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
         Text(stringResource(R.string.settings_language), fontSize = 19.sp)
         Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth().selectableGroup()) {
@@ -361,7 +366,7 @@ private fun LanguageRow() {
                         .weight(1f)
                         .heightIn(min = 60.dp)
                         .selectable(selected = selected, role = Role.RadioButton, onClick = {
-                            if (!selected) lm.applicationLocales = android.os.LocaleList.forLanguageTags(tag)
+                            if (!selected) AppLanguage.set(activity, tag)
                         }),
                 ) {
                     Box(contentAlignment = Alignment.Center, modifier = Modifier.padding(8.dp)) {

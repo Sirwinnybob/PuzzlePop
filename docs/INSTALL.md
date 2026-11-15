@@ -1,7 +1,7 @@
 # Installing PuzzlePop on a tablet or phone
 
 PuzzlePop isn't on the Play Store, so you install the APK yourself. The device
-needs Android 13 or newer (Settings > About tablet > Software information >
+needs Android 8 or newer (Settings > About tablet > Software information >
 Android version).
 
 Build the APK first (see the README). It will be in

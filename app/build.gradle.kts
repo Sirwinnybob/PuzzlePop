@@ -19,8 +19,10 @@ android {
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.family.puzzlepop"
-        minSdk = 33
+        // The Play package name. The family's sideloaded installs predate it, so `-Pfamily` builds
+        // under their old name instead: it updates them in place and keeps their photos and puzzles.
+        applicationId = if (project.hasProperty("family")) "com.family.puzzlepop" else "io.github.sirwinnybob.puzzlepop"
+        minSdk = 26
         targetSdk = 36
         versionCode = 3
         versionName = "0.3"
@@ -43,7 +45,10 @@ android {
             applicationIdSuffix = ".debug"
         }
         release {
-            isMinifyEnabled = false
+            // R8: shrinks and optimises the Play build. Compose, Room and kotlinx.serialization ship their own keep rules.
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             if (keystorePropsFile.exists()) {
                 signingConfig = signingConfigs.getByName("release")
             }

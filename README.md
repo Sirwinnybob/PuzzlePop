@@ -75,7 +75,7 @@ layout is designed for a tablet in landscape.
 
 ## Requirements
 
-- Android 13 or newer on the device
+- Android 8 or newer on the device
 - To build: JDK 17+ and the Android SDK (platform 36). Android Studio is not required.
 
 ## Building
@@ -111,7 +111,15 @@ You can make a key with:
 keytool -genkeypair -v -keystore ~/.puzzlepop/puzzlepop-release.jks -keyalg RSA -keysize 2048 -validity 10000 -alias puzzlepop
 ```
 
-Then run `./gradlew assembleRelease`. Back up the key. Android only allows
+Then run `./gradlew assembleRelease` for an APK, or `./gradlew bundleRelease` for
+the app bundle (`app/build/outputs/bundle/release/app-release.aab`) that Google
+Play takes. Release builds are shrunk with R8, so keep the
+`app/build/outputs/mapping/release/mapping.txt` from each Play upload for
+readable crash reports.
+
+Copies sideloaded before the Play release use the old package name
+`com.family.puzzlepop`. To update one of those without losing its puzzles, build
+with `./gradlew assembleRelease -Pfamily` and install over it. Back up the key. Android only allows
 updates signed with the same key, and without it you have to uninstall the app,
 which deletes all its photos and puzzles.
 
@@ -131,6 +139,11 @@ See [docs/INSTALL.md](docs/INSTALL.md) for getting the APK onto a tablet.
 All from Wikimedia Commons, CC0 or public domain: kitten by Ilona Ilyés,
 corgi by Huoadg5888, hot air balloon by Bonnie Moreland, foxes by USFWS
 Alaska, puppies by Martin Vorel, lotus by Hong Zhang.
+
+## Privacy
+
+PuzzlePop collects nothing. See the [privacy policy](docs/PRIVACY.md), which is
+also in the app under grown-up settings, along with the open-source licenses.
 
 ## License
 

@@ -260,4 +260,15 @@
     <string name="color_purple">보라</string>
     <string name="color_light">밝은색</string>
     <string name="color_dark">어두운색</string>
+    <!-- About, privacy and open-source licenses (from grown-up settings) -->
+    <string name="settings_about">앱 정보, 개인정보 및 라이선스</string>
+    <string name="about_title">PuzzlePop 정보</string>
+    <string name="about_version">버전 %1$s</string>
+    <string name="about_privacy_title">개인정보</string>
+    <string name="about_privacy_body">PuzzlePop에는 광고, 계정, 분석 기능이 없고 인터넷도 사용할 수 없어요. 사진, 퍼즐, 설정, PIN은 모두 이 태블릿의 앱 전용 저장공간에만 있어요. 클라우드에 백업되지 않으며, 앱을 삭제하면 함께 지워져요. 지문 확인은 Android가 처리하므로 앱은 지문을 볼 수 없어요.</string>
+    <string name="about_privacy_link">개인정보처리방침 전체 보기</string>
+    <string name="about_licenses_title">오픈소스 라이선스</string>
+    <string name="about_licenses_body">PuzzlePop은 다음 오픈소스 라이브러리로 만들어졌으며, 모두 Apache License 2.0을 따릅니다:</string>
+    <string name="about_license_show">Apache License 2.0 보기</string>
+    <string name="about_license_hide">라이선스 숨기기</string>
 </resources>

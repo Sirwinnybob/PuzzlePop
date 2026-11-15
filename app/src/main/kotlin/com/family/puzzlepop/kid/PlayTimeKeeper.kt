@@ -3,7 +3,6 @@ package com.family.puzzlepop.kid
 import com.family.puzzlepop.settings.KidSettings
 import com.family.puzzlepop.settings.Usage
 import java.time.Instant
-import java.time.LocalDate
 import java.time.ZoneId
 
 /**
@@ -75,7 +74,7 @@ class PlayTimeKeeper(
         var delta = lastTick?.let { (nowEpochMs - it).coerceIn(0, MAX_TICK_MS) } ?: 0L
         lastTick = nowEpochMs
 
-        val today = LocalDate.ofInstant(Instant.ofEpochMilli(nowEpochMs), zone).toString()
+        val today = Instant.ofEpochMilli(nowEpochMs).atZone(zone).toLocalDate().toString()
         if (today != dayKey) {
             dayKey = today
             dailyUsedMs = 0

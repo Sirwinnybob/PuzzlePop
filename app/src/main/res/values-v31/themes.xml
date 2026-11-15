@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Android 12+ system splash screen: same colour as the app background. -->
+    <style name="Theme.PuzzlePop.Platform" parent="Theme.PuzzlePop.Base">
+        <item name="android:windowSplashScreenBackground">@color/window_background</item>
+    </style>
+</resources>

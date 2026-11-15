@@ -42,6 +42,7 @@ import com.family.puzzlepop.kid.rememberKidExitController
 import com.family.puzzlepop.kid.rememberKidTimeViewModel
 import com.family.puzzlepop.settings.GrownUpSettingsScreen
 import com.family.puzzlepop.settings.SpeedTestScreen
+import com.family.puzzlepop.settings.AboutScreen
 import kotlinx.coroutines.launch
 import com.family.puzzlepop.kid.KidHomeScreen
 import com.family.puzzlepop.kid.PinSetupScreen
@@ -190,7 +191,11 @@ fun AppNavHost() {
             GrownUpSettingsScreen(
                 onDone = { nav.popBackStack() },
                 onSpeedTest = { nav.navigate(SpeedTestRoute) { launchSingleTop = true } },
+                onAbout = { nav.navigate(AboutRoute) { launchSingleTop = true } },
             )
+        }
+        composable<AboutRoute> {
+            AboutScreen(onDone = { nav.popBackStack() })
         }
         composable<SpeedTestRoute> {
             SpeedTestScreen(onDone = { nav.popBackStack() })

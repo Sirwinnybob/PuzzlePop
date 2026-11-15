@@ -19,6 +19,10 @@ object KidHomeRoute
 @Serializable
 object GrownUpSettingsRoute
 
+/** About, privacy and open-source licenses, opened from grown-up settings. */
+@Serializable
+object AboutRoute
+
 /** Hidden speed test, opened from grown-up settings (tap the title 7 times). */
 @Serializable
 object SpeedTestRoute

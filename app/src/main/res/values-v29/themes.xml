@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Platform DayNight theme (Android 10+): follows the system light/dark setting. -->
+    <style name="Theme.PuzzlePop.Base" parent="android:Theme.DeviceDefault.DayNight" />
+</resources>
