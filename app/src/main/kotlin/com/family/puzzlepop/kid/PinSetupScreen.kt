@@ -84,45 +84,53 @@ fun PinSetupScreen(onDone: () -> Unit, changeMode: Boolean = false, onCancel: ()
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.verticalScroll(rememberScrollState()).padding(horizontal = 24.dp, vertical = 16.dp),
         ) {
-            Text(
-                stringResource(
-                    when {
-                        first != null -> R.string.pin_setup_confirm_title
-                        changeMode -> R.string.pin_change_title
-                        else -> R.string.pin_setup_title
-                    },
-                ),
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center,
+            PinLayout(
+                header = {
+                    Text(
+                        stringResource(
+                            when {
+                                first != null -> R.string.pin_setup_confirm_title
+                                changeMode -> R.string.pin_change_title
+                                else -> R.string.pin_setup_title
+                            },
+                        ),
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center,
+                    )
+                    Spacer(Modifier.height(6.dp))
+                    Text(
+                        stringResource(R.string.pin_setup_body),
+                        fontSize = 17.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        textAlign = TextAlign.Center,
+                    )
+                    Spacer(Modifier.height(16.dp))
+                    Box(Modifier.graphicsLayer { translationX = shake.value }) { PinDots(count = digits.length) }
+                    Text(
+                        message?.let { stringResource(it) } ?: "",
+                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.bodyMedium,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.height(28.dp),
+                    )
+                },
+                pad = {
+                    PinPad(
+                        onDigit = { if (digits.length < 6) { digits += it; message = null } },
+                        onBackspace = { digits = digits.dropLast(1) },
+                        onOk = ::submit,
+                        okEnabled = digits.length >= 4 && !saving,
+                    )
+                },
+                footer = {
+                    if (changeMode) {
+                        TextButton(onClick = onCancel, modifier = Modifier.height(52.dp)) {
+                            Text(stringResource(R.string.pin_cancel), fontSize = 18.sp)
+                        }
+                    }
+                },
             )
-            Spacer(Modifier.height(6.dp))
-            Text(
-                stringResource(R.string.pin_setup_body),
-                fontSize = 17.sp,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center,
-            )
-            Spacer(Modifier.height(16.dp))
-            Box(Modifier.graphicsLayer { translationX = shake.value }) { PinDots(count = digits.length) }
-            Text(
-                message?.let { stringResource(it) } ?: "",
-                color = MaterialTheme.colorScheme.error,
-                style = MaterialTheme.typography.bodyMedium,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.height(28.dp),
-            )
-            PinPad(
-                onDigit = { if (digits.length < 6) { digits += it; message = null } },
-                onBackspace = { digits = digits.dropLast(1) },
-                onOk = ::submit,
-                okEnabled = digits.length >= 4 && !saving,
-            )
-            if (changeMode) {
-                TextButton(onClick = onCancel, modifier = Modifier.height(52.dp)) {
-                    Text(stringResource(R.string.pin_cancel), fontSize = 18.sp)
-                }
-            }
         }
     }
 }

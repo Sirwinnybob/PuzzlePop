@@ -1,5 +1,6 @@
 package com.family.puzzlepop.newpuzzle
 
+import com.family.puzzlepop.ui.isShortLandscape
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
@@ -162,6 +163,7 @@ fun NewPuzzleSheet(
             val wide = maxWidth >= 700.dp
             val compact = maxWidth < 480.dp
             val screenHeight = LocalConfiguration.current.screenHeightDp.dp
+            val short = isShortLandscape() // phone held sideways: smaller title and photo so the shapes show
             val controls: @Composable ColumnScope.() -> Unit = {
                 SectionCard(SheetColors.Custom, icon = R.drawable.ic_trophy, title = stringResource(R.string.preset_title)) {
                     PresetTiles(
@@ -211,7 +213,7 @@ fun NewPuzzleSheet(
                         Modifier.weight(1f).heightIn(max = (screenHeight - 100.dp).coerceAtLeast(240.dp)),
                         verticalArrangement = Arrangement.spacedBy(12.dp),
                     ) {
-                        SheetHeader()
+                        SheetHeader(small = short)
                         Column(
                             Modifier.weight(1f, fill = false).verticalScroll(rememberScrollState()),
                             verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -220,7 +222,7 @@ fun NewPuzzleSheet(
                                 photo = photo, photoFile = photoFile, thumbFile = thumbFile,
                                 rows = grid.rows, cols = grid.cols,
                                 // Leaves room for the header and both rows of shape tiles (about 410dp) with no scrolling.
-                                maxHeight = (screenHeight - 570.dp).coerceIn(160.dp, 520.dp),
+                                maxHeight = if (short) 130.dp else (screenHeight - 570.dp).coerceIn(160.dp, 520.dp),
                                 modifier = Modifier.fillMaxWidth(),
                             )
                             shapes()
@@ -264,17 +266,17 @@ fun NewPuzzleSheet(
 }
 
 @Composable
-private fun SheetHeader() {
+private fun SheetHeader(small: Boolean = false) {
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
         Icon(
             painterResource(R.drawable.ic_puzzle_piece),
             contentDescription = null,
             tint = Color.Unspecified,
-            modifier = Modifier.size(44.dp).rotate(-8f),
+            modifier = Modifier.size(if (small) 32.dp else 44.dp).rotate(-8f),
         )
         Text(
             stringResource(R.string.sheet_title),
-            style = MaterialTheme.typography.headlineMedium,
+            style = if (small) MaterialTheme.typography.titleLarge else MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.ExtraBold,
             color = MaterialTheme.colorScheme.primary,
         )
@@ -525,7 +527,7 @@ private fun StartArea(creating: Boolean, failed: Boolean, onStart: () -> Unit) {
         Box(
             Modifier
                 .fillMaxWidth()
-                .height(76.dp)
+                .height(if (isShortLandscape()) 60.dp else 76.dp)
                 .graphicsLayer {
                     scaleX = scale.value
                     scaleY = scale.value

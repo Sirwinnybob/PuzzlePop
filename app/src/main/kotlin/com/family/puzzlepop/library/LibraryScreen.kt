@@ -1,5 +1,10 @@
 package com.family.puzzlepop.library
 
+import com.family.puzzlepop.ui.isNarrowPortrait
+import com.family.puzzlepop.ui.isShortLandscape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.layout.BoxWithConstraints
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -115,6 +120,8 @@ fun LibraryScreen(onOpenPuzzle: (String) -> Unit, onStartKidMode: () -> Unit, on
     val widthClass = calculateWindowSizeClass(activity).widthSizeClass
     val compact = widthClass == WindowWidthSizeClass.Compact
     val expanded = widthClass == WindowWidthSizeClass.Expanded
+    val short = isShortLandscape() // phone held sideways: every bit of height counts
+    val narrow = isNarrowPortrait() // phone held upright: both top buttons must fit in one row
 
     val snackbar = remember { SnackbarHostState() }
     var sheetPhotoId by rememberSaveable { mutableStateOf<String?>(null) }
@@ -185,19 +192,34 @@ fun LibraryScreen(onOpenPuzzle: (String) -> Unit, onStartKidMode: () -> Unit, on
         topBar = {
             Row(
                 Modifier.fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.background) // photos scroll under it
                     .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Top + WindowInsetsSides.Horizontal))
-                    .padding(horizontal = 12.dp),
+                    .padding(horizontal = 12.dp)
+                    .padding(bottom = 6.dp),
                 horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.End),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-                FilledTonalButton(onClick = { unlockingSettings = true }, modifier = Modifier.heightIn(min = 56.dp)) {
-                    Icon(painterResource(R.drawable.ic_settings), contentDescription = null, tint = Color.Unspecified, modifier = Modifier.size(28.dp))
-                    Spacer(Modifier.width(10.dp))
-                    Text(stringResource(R.string.settings_open), fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                val buttonHeight = if (short) 48.dp else 56.dp
+                val labelSize = if (short || narrow) 16.sp else 18.sp
+                if (short && !empty) {
+                    // The library's title moves up here, so the photos start higher.
+                    AppTitle(Modifier.weight(1f), small = true)
                 }
-                FilledTonalButton(onClick = { startingKidMode = true }, modifier = Modifier.heightIn(min = 56.dp)) {
+                val settingsLabel = stringResource(R.string.settings_open)
+                FilledTonalButton(
+                    onClick = { unlockingSettings = true },
+                    modifier = Modifier.heightIn(min = buttonHeight).semantics { contentDescription = settingsLabel },
+                ) {
+                    Icon(painterResource(R.drawable.ic_settings), contentDescription = null, tint = Color.Unspecified, modifier = Modifier.size(28.dp))
+                    if (!narrow) {
+                        Spacer(Modifier.width(10.dp))
+                        Text(settingsLabel, fontSize = labelSize, fontWeight = FontWeight.Bold)
+                    }
+                }
+                FilledTonalButton(onClick = { startingKidMode = true }, modifier = Modifier.heightIn(min = buttonHeight)) {
                     Icon(painterResource(R.drawable.ic_kid_mode), contentDescription = null, tint = Color.Unspecified, modifier = Modifier.size(28.dp))
                     Spacer(Modifier.width(10.dp))
-                    Text(stringResource(R.string.kid_start), fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                    Text(stringResource(R.string.kid_start), fontSize = labelSize, fontWeight = FontWeight.Bold)
                 }
             }
         },
@@ -205,9 +227,9 @@ fun LibraryScreen(onOpenPuzzle: (String) -> Unit, onStartKidMode: () -> Unit, on
             if (ui.loaded && !empty) {
                 ExtendedFloatingActionButton(
                     onClick = startAddPhoto,
-                    icon = { Icon(painterResource(R.drawable.ic_add_photo), contentDescription = null, tint = Color.Unspecified, modifier = Modifier.size(32.dp)) },
-                    text = { Text(stringResource(R.string.library_add_photo), fontSize = 18.sp, fontWeight = FontWeight.Bold) },
-                    modifier = Modifier.heightIn(min = 64.dp),
+                    icon = { Icon(painterResource(R.drawable.ic_add_photo), contentDescription = null, tint = Color.Unspecified, modifier = Modifier.size(if (short) 28.dp else 32.dp)) },
+                    text = { Text(stringResource(R.string.library_add_photo), fontSize = if (short) 16.sp else 18.sp, fontWeight = FontWeight.Bold) },
+                    modifier = Modifier.heightIn(min = if (short) 52.dp else 64.dp),
                 )
             }
         },
@@ -220,6 +242,7 @@ fun LibraryScreen(onOpenPuzzle: (String) -> Unit, onStartKidMode: () -> Unit, on
                 vm = vm,
                 compact = compact,
                 expanded = expanded,
+                short = short,
                 inner = inner,
                 onOpenPhoto = { sheetPhotoId = it.id },
                 onOpenPuzzle = onOpenPuzzle,
@@ -306,6 +329,7 @@ private fun LibraryGrid(
     vm: LibraryViewModel,
     compact: Boolean,
     expanded: Boolean,
+    short: Boolean,
     inner: PaddingValues,
     onOpenPhoto: (PhotoEntity) -> Unit,
     onOpenPuzzle: (String) -> Unit,
@@ -313,37 +337,25 @@ private fun LibraryGrid(
     onAskRemovePuzzle: (String) -> Unit,
 ) {
     val dir = LocalLayoutDirection.current
-    val side: Dp = if (compact) 16.dp else 32.dp
-    val gap: Dp = if (compact) 12.dp else 20.dp
+    val side: Dp = if (compact || short) 16.dp else 32.dp
+    val gap: Dp = if (compact || short) 12.dp else 20.dp
     val now = remember(ui.inProgress) { System.currentTimeMillis() }
     LazyVerticalGrid(
         // Phones: ~2 columns. Tablets get bigger photos so a 12" screen is not mostly empty space.
-        columns = GridCells.Adaptive(if (compact) 150.dp else if (expanded) 260.dp else 210.dp),
+        // A phone held sideways gets smaller tiles so a whole row fits under the buttons.
+        columns = GridCells.Adaptive(if (compact) 150.dp else if (short) 170.dp else if (expanded) 260.dp else 210.dp),
         contentPadding = PaddingValues(
             start = inner.calculateStartPadding(dir) + side,
             end = inner.calculateEndPadding(dir) + side,
-            top = inner.calculateTopPadding() + 12.dp,
-            bottom = inner.calculateBottomPadding() + 112.dp, // room for the Add photo button
+            top = inner.calculateTopPadding() + if (short) 4.dp else 12.dp,
+            bottom = inner.calculateBottomPadding() + if (short) 88.dp else 112.dp, // room for the Add photo button
         ),
         horizontalArrangement = Arrangement.spacedBy(gap),
         verticalArrangement = Arrangement.spacedBy(gap),
         modifier = Modifier.fillMaxSize(),
     ) {
-        item(key = "header", span = { GridItemSpan(maxLineSpan) }) {
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                Icon(
-                    painterResource(R.drawable.ic_puzzle_piece),
-                    contentDescription = null,
-                    tint = Color.Unspecified,
-                    modifier = Modifier.size(40.dp),
-                )
-                Text(
-                    stringResource(R.string.app_name),
-                    style = MaterialTheme.typography.headlineMedium,
-                    fontWeight = FontWeight.ExtraBold,
-                    color = MaterialTheme.colorScheme.primary,
-                )
-            }
+        if (!short) {
+            item(key = "header", span = { GridItemSpan(maxLineSpan) }) { AppTitle() }
         }
         if (ui.importing) {
             item(key = "importing", span = { GridItemSpan(maxLineSpan) }) {
@@ -364,7 +376,7 @@ private fun LibraryGrid(
                             item = item,
                             thumb = vm.thumbFile(item.photo),
                             now = now,
-                            width = if (compact) 170.dp else if (expanded) 320.dp else 240.dp,
+                            width = if (compact || short) 170.dp else if (expanded) 320.dp else 240.dp,
                             onClick = { onOpenPuzzle(item.puzzle.id) },
                             onRemove = { onAskRemovePuzzle(item.puzzle.id) },
                         )
@@ -373,11 +385,11 @@ private fun LibraryGrid(
             }
         }
         item(key = "pick-title", span = { GridItemSpan(maxLineSpan) }) {
-            Column(Modifier.padding(top = 8.dp)) {
+            Column(Modifier.padding(top = if (short) 0.dp else 8.dp)) {
                 SectionTitle(stringResource(R.string.library_pick_photo))
                 Text(
                     stringResource(R.string.library_pick_hint),
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = if (short) MaterialTheme.typography.bodyMedium else MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
@@ -393,6 +405,26 @@ private fun LibraryGrid(
                 onDelete = { onAskDelete(photo) },
             )
         }
+    }
+}
+
+/** The puzzle-piece logo and app name: above the photos, or in the top bar on a phone held sideways. */
+@Composable
+private fun AppTitle(modifier: Modifier = Modifier, small: Boolean = false) {
+    Row(modifier, verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(if (small) 8.dp else 12.dp)) {
+        Icon(
+            painterResource(R.drawable.ic_puzzle_piece),
+            contentDescription = null,
+            tint = Color.Unspecified,
+            modifier = Modifier.size(if (small) 32.dp else 40.dp),
+        )
+        Text(
+            stringResource(R.string.app_name),
+            style = if (small) MaterialTheme.typography.titleLarge else MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.ExtraBold,
+            color = MaterialTheme.colorScheme.primary,
+            maxLines = 1,
+        )
     }
 }
 
@@ -561,7 +593,14 @@ private fun MenuRow(@DrawableRes icon: Int, text: String, onClick: () -> Unit) {
 
 @Composable
 private fun EmptyLibrary(onAdd: () -> Unit, importing: Boolean, modifier: Modifier = Modifier) {
-    Box(modifier.fillMaxSize().padding(24.dp), contentAlignment = Alignment.Center) {
+    // Scrolls, and shrinks the picture, so "Add photo" stays reachable on a phone held sideways.
+    BoxWithConstraints(modifier.fillMaxSize()) {
+        val short = maxHeight < 520.dp
+        Column(
+            Modifier.fillMaxWidth().heightIn(min = maxHeight).verticalScroll(rememberScrollState()).padding(if (short) 12.dp else 24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+        ) {
         Card(
             shape = RoundedCornerShape(32.dp),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
@@ -569,14 +608,14 @@ private fun EmptyLibrary(onAdd: () -> Unit, importing: Boolean, modifier: Modifi
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = Modifier.padding(horizontal = 32.dp, vertical = 32.dp),
+                verticalArrangement = Arrangement.spacedBy(if (short) 10.dp else 16.dp),
+                modifier = Modifier.padding(horizontal = 32.dp, vertical = if (short) 20.dp else 32.dp),
             ) {
                 Icon(
                     painterResource(R.drawable.ic_empty_library),
                     contentDescription = stringResource(R.string.cd_empty_library),
                     tint = Color.Unspecified,
-                    modifier = Modifier.size(112.dp),
+                    modifier = Modifier.size(if (short) 64.dp else 112.dp),
                 )
                 Text(
                     stringResource(R.string.library_empty_title),
@@ -599,6 +638,7 @@ private fun EmptyLibrary(onAdd: () -> Unit, importing: Boolean, modifier: Modifi
                     }
                 }
             }
+        }
         }
     }
 }

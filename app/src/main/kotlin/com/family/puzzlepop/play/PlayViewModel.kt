@@ -805,6 +805,12 @@ class PlayViewModel(
         }
     }
 
+    /** Debug builds only: the first use solves the top half, the next all but one (see the play toolbar). */
+    fun debugSolveStep() {
+        val g = gameRef ?: return
+        if (g.placedCount < g.layout.pieces.size / 2) debugSolveTopHalf() else debugSolveAllButOne()
+    }
+
     /** Debug builds only: locks every piece except one group, so the last drop can be tested by hand. */
     fun debugSolveAllButOne() {
         if (!BuildConfig.DEBUG) return
@@ -813,9 +819,25 @@ class PlayViewModel(
         val keep = (z.size - 1 downTo 0).map { z[it] }.firstOrNull { !g.isLocked(it) && !g.isInTray(it) }
             ?: g.trayPieces.firstOrNull() ?: return
         val keepGroup = g.groupId(keep)
+        debugLock { id -> g.groupId(id) != keepGroup }
+        Log.i(TAG, "debugSolveAllButOne: left piece $keep (group of ${g.groupMembers(keep).size})")
+    }
+
+    /** Debug builds only: locks the top half of the picture, so a puzzle looks well under way (store screenshots). */
+    fun debugSolveTopHalf() {
+        if (!BuildConfig.DEBUG) return
+        val g = gameRef ?: return
+        val pieces = g.layout.pieces
+        val middle = pieces.map { it.bounds.top }.sorted().let { it[it.size / 2] }
+        debugLock { id -> pieces[id].bounds.top < middle }
+    }
+
+    /** Moves each unlocked piece that [which] picks to its home and drops it there. */
+    private fun debugLock(which: (Int) -> Boolean) {
+        val g = gameRef ?: return
         val layout = g.layout
         for (id in layout.pieces.indices) {
-            if (g.isLocked(id) || g.groupId(id) == keepGroup) continue
+            if (g.isLocked(id) || !which(id)) continue
             val home = layout.pieces[id].bounds
             if (g.isInTray(id)) g.takeFromTray(id, home.left, home.top)
             // Locking needs an upright group: stand it up first (rotation puzzles).
@@ -828,7 +850,6 @@ class PlayViewModel(
         boardTick.intValue++
         moveTick.intValue++
         _ui.update { it.copy(version = it.version + 1, placed = g.placedCount) }
-        Log.i(TAG, "debugSolveAllButOne: left piece $keep (group of ${g.groupMembers(keep).size})")
     }
 
     override fun onCleared() {

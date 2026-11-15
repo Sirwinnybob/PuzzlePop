@@ -1,5 +1,7 @@
 package com.family.puzzlepop.play
 
+import androidx.compose.foundation.gestures.detectTapGestures
+import com.family.puzzlepop.ui.isShortLandscape
 import androidx.activity.compose.BackHandler
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
@@ -189,7 +191,7 @@ fun PlayScreen(
             boxButtonShown = !kid,
             boxShown = boxShown,
             onBox = { if (boxShown) vm.hideBox() else vm.showBox() },
-            onDebugSolve = if (BuildConfig.DEBUG) vm::debugSolveAllButOne else null,
+            onDebugSolve = if (BuildConfig.DEBUG) vm::debugSolveStep else null,
             timerShown = !kid && opts.timer,
             elapsedNow = vm::elapsedNow,
             timerRunning = !ui.complete,
@@ -265,23 +267,28 @@ private fun PlayToolbar(
     Surface(tonalElevation = 2.dp, shadowElevation = 2.dp) {
       // A narrow screen (a tablet in portrait, a phone) gets compact buttons: icon with a small label under it.
       BoxWithConstraints(Modifier.fillMaxWidth()) {
-       val compact = !kid && maxWidth < COMPACT_TOOLBAR_BELOW
-       CompositionLocalProvider(LocalCompactToolbar provides compact) {
+       // A phone held sideways: a slim bar (small icon beside its label) so the board keeps its height.
+       val short = isShortLandscape()
+       val compact = !kid && !short && maxWidth < COMPACT_TOOLBAR_BELOW
+       // A phone held upright: not even icon-over-label buttons fit, so the grown-up buttons show icons only.
+       val iconOnly = !kid && maxWidth < ICON_ONLY_TOOLBAR_BELOW
+       val barButton = if (short) 44.dp else 56.dp
+       CompositionLocalProvider(LocalCompactToolbar provides compact, LocalShortToolbar provides short, LocalIconOnlyToolbar provides iconOnly) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(if (compact) 6.dp else 12.dp),
+            horizontalArrangement = Arrangement.spacedBy(if (iconOnly) 4.dp else if (compact) 6.dp else 12.dp),
             modifier = Modifier
                 .fillMaxWidth()
                 .windowInsetsPadding(WindowInsets.statusBars.union(WindowInsets.displayCutout))
-                .padding(horizontal = 12.dp, vertical = 6.dp),
+                .padding(horizontal = 12.dp, vertical = if (short) 2.dp else 6.dp),
         ) {
             if (kid) {
                 // Kid mode: a big friendly "My pictures" (no gate) and Peek; nothing else to tap.
-                FilledTonalButton(onClick = onHome, modifier = Modifier.heightIn(min = 72.dp)) {
-                    IconLabel(R.drawable.ic_gallery, stringResource(R.string.kid_my_pictures), 24.sp)
+                FilledTonalButton(onClick = onHome, modifier = Modifier.heightIn(min = if (short) 52.dp else 72.dp)) {
+                    IconLabel(R.drawable.ic_gallery, stringResource(R.string.kid_my_pictures), if (short) 20.sp else 24.sp)
                 }
             } else {
-                FilledTonalButton(onClick = onHome, modifier = Modifier.heightIn(min = 56.dp), contentPadding = toolbarPadding()) {
+                FilledTonalButton(onClick = onHome, modifier = Modifier.heightIn(min = barButton).then(iconOnlyWidth()), contentPadding = toolbarPadding()) {
                     IconLabel(R.drawable.ic_home, stringResource(R.string.play_home), 18.sp)
                 }
             }
@@ -291,20 +298,25 @@ private fun PlayToolbar(
                 val a11y = stringResource(R.string.play_pieces_placed_a11y, placed, total)
                 Text(
                     text = stringResource(R.string.play_pieces_placed, placed, total),
-                    style = if (compact) MaterialTheme.typography.titleLarge else MaterialTheme.typography.headlineSmall,
+                    style = if (iconOnly) MaterialTheme.typography.titleMedium else if (compact || short) MaterialTheme.typography.titleLarge else MaterialTheme.typography.headlineSmall,
                     maxLines = 1,
                     softWrap = false,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.semantics { contentDescription = a11y },
+                    // Debug builds: long-press the count to solve the top half, then again for all but one.
+                    // A hidden gesture rather than a button, so debug screens look like release (store screenshots).
+                    modifier = Modifier.semantics { contentDescription = a11y }.then(
+                        if (onDebugSolve != null) {
+                            Modifier.pointerInput(Unit) {
+                                detectTapGestures(onLongPress = { onDebugSolve() })
+                            }
+                        } else Modifier,
+                    ),
                 )
             }
             if (ready && timerShown) ToolbarTimer(elapsedNow, timerRunning)
             Spacer(Modifier.weight(1f))
-            if (onDebugSolve != null && ready) {
-                DebugSolveButton(onDebugSolve)
-            }
             if (ready && hintShown) {
-                FilledTonalButton(onClick = onHint, modifier = Modifier.heightIn(min = 56.dp), contentPadding = toolbarPadding()) {
+                FilledTonalButton(onClick = onHint, modifier = Modifier.heightIn(min = barButton).then(iconOnlyWidth()), contentPadding = toolbarPadding()) {
                     IconLabel(R.drawable.ic_hint, stringResource(R.string.play_hint), 18.sp)
                 }
             }
@@ -313,7 +325,7 @@ private fun PlayToolbar(
                 val cd = stringResource(if (boxShown) R.string.cd_box_hide else R.string.cd_box_show)
                 FilledTonalButton(
                     onClick = onBox,
-                    modifier = Modifier.heightIn(min = 56.dp).semantics { contentDescription = cd },
+                    modifier = Modifier.heightIn(min = barButton).then(iconOnlyWidth()).semantics { contentDescription = cd },
                     contentPadding = toolbarPadding(),
                 ) {
                     IconLabel(if (boxShown) R.drawable.ic_box_open else R.drawable.ic_box_closed, stringResource(R.string.play_box), 18.sp)
@@ -329,6 +341,11 @@ private fun PlayToolbar(
 /** Below this toolbar width the grown-up buttons stack their label under the icon. */
 private val COMPACT_TOOLBAR_BELOW = 840.dp
 private val LocalCompactToolbar = staticCompositionLocalOf { false }
+private val LocalShortToolbar = staticCompositionLocalOf { false }
+private val LocalIconOnlyToolbar = staticCompositionLocalOf { false }
+
+/** Below this toolbar width (a phone held upright) the grown-up buttons drop their labels. */
+private val ICON_ONLY_TOOLBAR_BELOW = 480.dp
 private val CompactButtonPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp)
 
 /** A small m:ss clock. It ticks once a second in its own composable, so the canvas never recomposes. */
@@ -368,8 +385,8 @@ private fun PeekButton(onPeek: (Boolean) -> Unit, peeksLeft: Int?) {
         color = if (pressed) colors.secondary else colors.secondaryContainer,
         contentColor = if (pressed) colors.onSecondary else colors.onSecondaryContainer,
         modifier = Modifier
-            .heightIn(min = 56.dp)
-            .widthIn(min = if (LocalCompactToolbar.current) 72.dp else 120.dp)
+            .heightIn(min = if (LocalShortToolbar.current) 44.dp else 56.dp)
+            .widthIn(min = if (LocalIconOnlyToolbar.current) 56.dp else if (LocalCompactToolbar.current) 72.dp else if (LocalShortToolbar.current) 96.dp else 120.dp)
             .alpha(if (used && !pressed) 0.5f else 1f)
             .pointerInput(Unit) {
                 awaitEachGesture {
@@ -394,7 +411,8 @@ private fun PeekButton(onPeek: (Boolean) -> Unit, peeksLeft: Int?) {
             },
     ) {
         val compact = LocalCompactToolbar.current
-        Box(contentAlignment = Alignment.Center, modifier = Modifier.padding(horizontal = if (compact) 12.dp else 20.dp, vertical = if (compact) 4.dp else 14.dp)) {
+        val short = LocalShortToolbar.current
+        Box(contentAlignment = Alignment.Center, modifier = Modifier.padding(horizontal = if (compact || short) 12.dp else 20.dp, vertical = if (compact) 4.dp else if (short) 8.dp else 14.dp)) {
             val label = when {
                 pressed -> stringResource(R.string.play_peek)
                 used -> stringResource(R.string.play_peek_none_left)
@@ -582,10 +600,19 @@ private fun DoneCard(
 /** A button label: icon then text. The icon is decorative; the text already names the action. */
 @Composable
 private fun IconLabel(@DrawableRes icon: Int, text: String, fontSize: TextUnit) {
-    if (LocalCompactToolbar.current) {
+    if (LocalIconOnlyToolbar.current) {
+        // No room for words: the label is still read out by screen readers.
+        Icon(painterResource(icon), contentDescription = text, tint = Color.Unspecified, modifier = Modifier.size(28.dp))
+    } else if (LocalCompactToolbar.current) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Icon(painterResource(icon), contentDescription = null, tint = Color.Unspecified, modifier = Modifier.size(26.dp))
             Text(text, fontSize = 12.sp, maxLines = 1, softWrap = false, overflow = TextOverflow.Ellipsis)
+        }
+    } else if (LocalShortToolbar.current) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(painterResource(icon), contentDescription = null, tint = Color.Unspecified, modifier = Modifier.size(22.dp))
+            Spacer(Modifier.width(6.dp))
+            Text(text, fontSize = minOf(fontSize.value, 15f).sp, maxLines = 1, softWrap = false)
         }
     } else {
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -598,7 +625,13 @@ private fun IconLabel(@DrawableRes icon: Int, text: String, fontSize: TextUnit) 
 
 @Composable
 private fun toolbarPadding(): PaddingValues =
-    if (LocalCompactToolbar.current) CompactButtonPadding else ButtonDefaults.ContentPadding
+    if (LocalIconOnlyToolbar.current) PaddingValues(horizontal = 10.dp, vertical = 4.dp)
+    else if (LocalCompactToolbar.current || LocalShortToolbar.current) CompactButtonPadding
+    else ButtonDefaults.ContentPadding
+
+/** Icon-only buttons drop the button's default 58dp minimum width so four of them fit on a phone. */
+@Composable
+private fun iconOnlyWidth(): Modifier = if (LocalIconOnlyToolbar.current) Modifier.widthIn(min = 48.dp) else Modifier
 
 /** "m:ss", or "h:mm:ss" from an hour on. */
 internal fun formatElapsed(ms: Long): String {

@@ -1,5 +1,7 @@
 package com.family.puzzlepop.kid
 
+import com.family.puzzlepop.ui.isShortLandscape
+import androidx.compose.foundation.layout.ColumnScope
 import android.content.Context
 import android.content.ContextWrapper
 import android.os.SystemClock
@@ -221,19 +223,22 @@ fun GrownUpGateDialog(onDismiss: () -> Unit, onUnlocked: () -> Unit) {
             shape = RoundedCornerShape(28.dp),
             color = MaterialTheme.colorScheme.surface,
             tonalElevation = 6.dp,
-            modifier = Modifier.padding(16.dp).widthIn(max = 380.dp),
+            modifier = Modifier.padding(16.dp).widthIn(max = if (isShortLandscape()) 760.dp else 380.dp),
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.verticalScroll(rememberScrollState()).padding(horizontal = 24.dp, vertical = 20.dp),
+                modifier = Modifier.verticalScroll(rememberScrollState()).padding(horizontal = 24.dp, vertical = if (isShortLandscape()) 12.dp else 20.dp),
             ) {
-                Text(
-                    stringResource(R.string.grownup_title),
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold,
-                )
-                Spacer(Modifier.height(12.dp))
+                val title: @Composable () -> Unit = {
+                    Text(
+                        stringResource(R.string.grownup_title),
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                    )
+                    Spacer(Modifier.height(12.dp))
+                }
                 if (!hasPin) {
+                    title()
                     Text(
                         stringResource(R.string.grownup_lost_pin),
                         style = MaterialTheme.typography.bodyLarge,
@@ -255,38 +260,47 @@ fun GrownUpGateDialog(onDismiss: () -> Unit, onUnlocked: () -> Unit) {
                     }
                     return@Column
                 }
-                if (biometricAvailable) {
-                    Button(
-                        onClick = ::launchBiometric,
-                        modifier = Modifier.fillMaxWidth().height(52.dp),
-                    ) { Text(stringResource(R.string.grownup_use_biometric), fontSize = 18.sp) }
-                    Spacer(Modifier.height(10.dp))
-                    Text(
-                        stringResource(R.string.grownup_or_pin),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                    Spacer(Modifier.height(6.dp))
-                }
-                Box(Modifier.graphicsLayer { translationX = shake.value }) {
-                    PinDots(count = digits.length)
-                }
-                Text(
-                    if (wrong) stringResource(R.string.grownup_wrong_pin) else "",
-                    color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodyMedium,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.height(24.dp),
+                PinLayout(
+                    header = {
+                        title()
+                        if (biometricAvailable) {
+                            Button(
+                                onClick = ::launchBiometric,
+                                modifier = Modifier.fillMaxWidth().height(52.dp),
+                            ) { Text(stringResource(R.string.grownup_use_biometric), fontSize = 18.sp) }
+                            Spacer(Modifier.height(10.dp))
+                            Text(
+                                stringResource(R.string.grownup_or_pin),
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                            Spacer(Modifier.height(6.dp))
+                        }
+                        Box(Modifier.graphicsLayer { translationX = shake.value }) {
+                            PinDots(count = digits.length)
+                        }
+                        Text(
+                            if (wrong) stringResource(R.string.grownup_wrong_pin) else "",
+                            color = MaterialTheme.colorScheme.error,
+                            style = MaterialTheme.typography.bodyMedium,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.height(24.dp),
+                        )
+                    },
+                    pad = {
+                        PinPad(
+                            onDigit = { if (!checking && digits.length < MAX_PIN) { digits += it; wrong = false } },
+                            onBackspace = { if (!checking) digits = digits.dropLast(1) },
+                            onOk = ::submit,
+                            okEnabled = digits.length >= 4 && !checking,
+                        )
+                    },
+                    footer = {
+                        TextButton(onClick = onDismiss, modifier = Modifier.height(52.dp)) {
+                            Text(stringResource(R.string.grownup_close), fontSize = 18.sp)
+                        }
+                    },
                 )
-                PinPad(
-                    onDigit = { if (!checking && digits.length < MAX_PIN) { digits += it; wrong = false } },
-                    onBackspace = { if (!checking) digits = digits.dropLast(1) },
-                    onOk = ::submit,
-                    okEnabled = digits.length >= 4 && !checking,
-                )
-                TextButton(onClick = onDismiss, modifier = Modifier.height(52.dp)) {
-                    Text(stringResource(R.string.grownup_close), fontSize = 18.sp)
-                }
             }
         }
     }
@@ -315,6 +329,34 @@ internal fun PinDots(count: Int, modifier: Modifier = Modifier) {
                     .clip(CircleShape)
                     .background(if (i < count) filled else empty),
             )
+        }
+    }
+}
+
+/**
+ * A PIN screen's parts: [header] (title, dots, message) above the [pad], or beside it on a phone held
+ * sideways, where the two don't fit stacked. [footer] (Close / Cancel) goes under the header.
+ */
+@Composable
+internal fun PinLayout(
+    header: @Composable ColumnScope.() -> Unit,
+    pad: @Composable () -> Unit,
+    footer: @Composable ColumnScope.() -> Unit = {},
+    modifier: Modifier = Modifier,
+) {
+    if (isShortLandscape()) {
+        Row(modifier, verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(28.dp)) {
+            Column(Modifier.widthIn(max = 320.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                header()
+                footer()
+            }
+            pad()
+        }
+    } else {
+        Column(modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+            header()
+            pad()
+            footer()
         }
     }
 }
@@ -362,7 +404,7 @@ private fun PadKey(
 ) {
     Box(
         modifier = Modifier
-            .size(width = 80.dp, height = 64.dp)
+            .size(width = 80.dp, height = if (isShortLandscape()) 56.dp else 64.dp)
             .clip(RoundedCornerShape(20.dp))
             .background(if (plain) Color.Transparent else MaterialTheme.colorScheme.secondaryContainer)
             .clickable(enabled = enabled, onClick = onClick)

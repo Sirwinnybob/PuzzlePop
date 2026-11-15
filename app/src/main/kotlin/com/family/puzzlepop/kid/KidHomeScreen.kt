@@ -1,5 +1,7 @@
 package com.family.puzzlepop.kid
 
+import com.family.puzzlepop.ui.isNarrowPortrait
+import com.family.puzzlepop.ui.isShortLandscape
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
 import androidx.annotation.DrawableRes
@@ -104,6 +106,9 @@ fun KidHomeScreen(onOpenPuzzle: (String) -> Unit, onLeave: () -> Unit) {
     LaunchedEffect(vm) { vm.created.collect { id -> pickedId = null; onOpenPuzzle(id) } }
 
     val palette = kidPalette()
+    val short = isShortLandscape() // phone held sideways: smaller title and tiles so pictures show at once
+    val smallTitle = short || isNarrowPortrait() // the big title doesn't fit across a phone held upright either
+    val gap = if (short) 16.dp else 24.dp
     Box(
         Modifier
             .fillMaxSize()
@@ -112,15 +117,15 @@ fun KidHomeScreen(onOpenPuzzle: (String) -> Unit, onLeave: () -> Unit) {
         val insets = WindowInsets.safeDrawing.asPaddingValues()
         val dir = androidx.compose.ui.platform.LocalLayoutDirection.current
         LazyVerticalGrid(
-            columns = GridCells.Adaptive(260.dp),
+            columns = GridCells.Adaptive(if (short) 190.dp else 260.dp),
             contentPadding = PaddingValues(
-                start = insets.calculateStartPadding(dir) + 32.dp,
-                end = insets.calculateEndPadding(dir) + 32.dp,
-                top = insets.calculateTopPadding() + 16.dp,
-                bottom = insets.calculateBottomPadding() + 32.dp,
+                start = insets.calculateStartPadding(dir) + if (short) 20.dp else 32.dp,
+                end = insets.calculateEndPadding(dir) + if (short) 20.dp else 32.dp,
+                top = insets.calculateTopPadding() + if (short) 8.dp else 16.dp,
+                bottom = insets.calculateBottomPadding() + if (short) 20.dp else 32.dp,
             ),
-            horizontalArrangement = Arrangement.spacedBy(24.dp),
-            verticalArrangement = Arrangement.spacedBy(24.dp),
+            horizontalArrangement = Arrangement.spacedBy(gap),
+            verticalArrangement = Arrangement.spacedBy(gap),
             modifier = Modifier.fillMaxSize(),
         ) {
             item(key = "header", span = { GridItemSpan(maxLineSpan) }) {
@@ -129,10 +134,10 @@ fun KidHomeScreen(onOpenPuzzle: (String) -> Unit, onLeave: () -> Unit) {
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
                     modifier = Modifier.padding(end = 64.dp), // clear of the grown-up button
                 ) {
-                    Icon(painterResource(R.drawable.ic_kid_mode), contentDescription = null, tint = Color.Unspecified, modifier = Modifier.size(72.dp))
+                    Icon(painterResource(R.drawable.ic_kid_mode), contentDescription = null, tint = Color.Unspecified, modifier = Modifier.size(if (smallTitle) 44.dp else 72.dp))
                     Text(
                         stringResource(R.string.app_name),
-                        fontSize = 44.sp,
+                        fontSize = if (smallTitle) 30.sp else 44.sp,
                         fontWeight = FontWeight.ExtraBold,
                         color = colorResource(R.color.icon_grape_dark),
                     )
@@ -157,10 +162,10 @@ fun KidHomeScreen(onOpenPuzzle: (String) -> Unit, onLeave: () -> Unit) {
             }
             if (ui.inProgress.isNotEmpty()) {
                 item(key = "continue-title", span = { GridItemSpan(maxLineSpan) }) {
-                    KidSectionTitle(stringResource(R.string.library_keep_playing))
+                    KidSectionTitle(stringResource(R.string.library_keep_playing), smallTitle)
                 }
                 item(key = "continue-row", span = { GridItemSpan(maxLineSpan) }) {
-                    LazyRow(horizontalArrangement = Arrangement.spacedBy(24.dp)) {
+                    LazyRow(horizontalArrangement = Arrangement.spacedBy(gap)) {
                         itemsIndexed(ui.inProgress, key = { _, it -> it.puzzle.id }) { index, item ->
                             val (fill, edge) = palette[(index + 3) % palette.size]
                             KidTile(
@@ -170,7 +175,7 @@ fun KidHomeScreen(onOpenPuzzle: (String) -> Unit, onLeave: () -> Unit) {
                                 a11y = stringResource(R.string.library_keep_playing),
                                 progress = item.puzzle.placedCount / item.puzzle.pieceCount.coerceAtLeast(1).toFloat(),
                                 onClick = { onOpenPuzzle(item.puzzle.id) },
-                                modifier = Modifier.width(280.dp),
+                                modifier = Modifier.width(if (short) 200.dp else 280.dp),
                             )
                         }
                     }
@@ -178,7 +183,7 @@ fun KidHomeScreen(onOpenPuzzle: (String) -> Unit, onLeave: () -> Unit) {
             }
             if (ui.photos.isNotEmpty()) {
                 item(key = "pick-title", span = { GridItemSpan(maxLineSpan) }) {
-                    KidSectionTitle(stringResource(R.string.library_pick_photo))
+                    KidSectionTitle(stringResource(R.string.library_pick_photo), smallTitle)
                 }
                 itemsIndexed(ui.photos, key = { _, it -> it.id }) { index, photo ->
                     val (fill, edge) = palette[index % palette.size]
@@ -238,8 +243,8 @@ internal fun EnsureKidModeOn() {
 }
 
 @Composable
-private fun KidSectionTitle(text: String) {
-    Text(text, fontSize = 30.sp, fontWeight = FontWeight.ExtraBold, color = colorResource(R.color.icon_ink))
+private fun KidSectionTitle(text: String, small: Boolean = false) {
+    Text(text, fontSize = if (small) 22.sp else 30.sp, fontWeight = FontWeight.ExtraBold, color = colorResource(R.color.icon_ink))
 }
 
 /** A big rounded picture with a thick coloured border. [progress] adds a bar along the bottom. */
@@ -278,13 +283,14 @@ private fun KidTile(
 /** The picture with three big size buttons (small / medium / big); a tap starts the puzzle at once. */
 @Composable
 private fun SizePicker(photo: PhotoEntity, ui: KidHomeUi, thumb: java.io.File, onPick: (Int) -> Unit, onDismiss: () -> Unit) {
+    val short = isShortLandscape() // a phone held sideways: shorter picture and buttons so all three fit
     Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
-        Surface(shape = RoundedCornerShape(40.dp), color = colorResource(R.color.icon_white), modifier = Modifier.padding(24.dp).widthIn(max = 640.dp)) {
+        Surface(shape = RoundedCornerShape(40.dp), color = colorResource(R.color.icon_white), modifier = Modifier.padding(if (short) 12.dp else 24.dp).widthIn(max = 640.dp)) {
             Box(contentAlignment = Alignment.Center) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(24.dp), modifier = Modifier.padding(28.dp)) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(if (short) 14.dp else 24.dp), modifier = Modifier.padding(if (short) 18.dp else 28.dp)) {
                     ThumbImage(
                         thumb,
-                        Modifier.fillMaxWidth().height(220.dp).clip(RoundedCornerShape(28.dp)),
+                        Modifier.fillMaxWidth().height(if (short) 120.dp else 220.dp).clip(RoundedCornerShape(28.dp)),
                         contentScale = ContentScale.Fit,
                     )
                     Row(horizontalArrangement = Arrangement.spacedBy(20.dp), modifier = Modifier.fillMaxWidth()) {
@@ -313,9 +319,10 @@ private fun SizeButton(
     modifier: Modifier = Modifier,
 ) {
     val shape = RoundedCornerShape(32.dp)
+    val short = isShortLandscape()
     Box(
         modifier
-            .height(150.dp)
+            .height(if (short) 110.dp else 150.dp)
             .clip(shape)
             .background(colorResource(fill))
             .border(BorderStroke(6.dp, colorResource(edge)), shape)
@@ -323,6 +330,6 @@ private fun SizeButton(
             .semantics { contentDescription = label },
         contentAlignment = Alignment.Center,
     ) {
-        Icon(painterResource(icon), contentDescription = null, tint = Color.Unspecified, modifier = Modifier.size(104.dp))
+        Icon(painterResource(icon), contentDescription = null, tint = Color.Unspecified, modifier = Modifier.size(if (short) 80.dp else 104.dp))
     }
 }

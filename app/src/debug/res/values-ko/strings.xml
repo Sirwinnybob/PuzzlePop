@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="debug_solve_all_but_one">하나만 남기고 맞추기</string>
     <string name="app_name">퍼즐팝 (테스트)</string>
 </resources>

@@ -39,7 +39,7 @@
     <string name="remove_puzzle_title">Remove this puzzle?</string>
     <string name="remove_puzzle_body">Its progress will be lost. The photo stays in the library.</string>
     <string name="remove_puzzle_confirm">Remove</string>
-    <string name="grownup_lost_pin">The app PIN was lost. Unlock with the tablet\'s own lock to set a new one.</string>
+    <string name="grownup_lost_pin">The app PIN was lost. Unlock with the device\'s own lock to set a new one.</string>
     <string name="grownup_lost_pin_continue">Continue</string>
     <string name="delete_title">Delete this photo?</string>
     <string name="delete_body">Its puzzles will be deleted too.</string>
@@ -131,7 +131,7 @@
     <string name="kid_size_medium">Medium puzzle</string>
     <string name="kid_size_big">Big puzzle</string>
     <string name="kid_start_failed">Oops! Let\'s try again.</string>
-    <string name="kid_no_lock_title">This tablet has no screen lock</string>
+    <string name="kid_no_lock_title">This device has no screen lock</string>
     <string name="kid_no_lock_body">Without a screen lock, a child could leave kid mode by unpinning the screen. Set one up in Settings first if you can. You can still start kid mode now.</string>
     <string name="kid_no_lock_continue">Start anyway</string>
     <string name="kid_no_lock_cancel">Not now</string>
@@ -139,10 +139,10 @@
     <string name="menu_kid_hide">Hide from kid mode</string>
     <string name="pin_guide_title">Keep kid mode locked in</string>
     <string name="pin_guide_intro">Kid mode pins the app to the screen. Do this once so only a grown-up can unpin it:</string>
-    <string name="pin_guide_step1">Open Settings, then Security and privacy, then More security settings, then Pin windows. (On other tablets, look for Screen pinning.)</string>
+    <string name="pin_guide_step1">Open Settings, then Security and privacy, then More security settings, then Pin windows. (On other devices, look for Screen pinning.)</string>
     <string name="pin_guide_step2">Turn it on, and turn on Ask for PIN before unpinning.</string>
     <string name="pin_guide_step3">Come back and start kid mode. Android will ask you to confirm; tap Start.</string>
-    <string name="pin_guide_step4">Leaving kid mode: hold the grown-up button, then unlock your tablet.</string>
+    <string name="pin_guide_step4">Leaving kid mode: hold the grown-up button, then unlock your device.</string>
     <string name="pin_guide_step5">Also turn off Smart Lock (Extend Unlock, trusted places and devices) in the lock screen settings. Otherwise the lock screen can be swiped away and a child could get out.</string>
     <string name="pin_guide_open_settings">Open settings</string>
     <string name="pin_guide_start">Start kid mode</string>
@@ -170,12 +170,12 @@
     <string name="settings_min_pieces">Smallest puzzle</string>
     <string name="settings_max_pieces">Biggest puzzle</string>
     <string name="settings_nap_after">Screen naps after (black until a tap)</string>
-    <string name="settings_real_sleep">Tablet sleeps after napping</string>
+    <string name="settings_real_sleep">Device sleeps after napping</string>
     <string name="settings_minutes">%1$d min</string>
     <string name="settings_pieces_n">%1$d pieces</string>
     <string name="settings_always_kid">Always open in kid mode on this device</string>
     <string name="settings_change_pin">Change PIN</string>
-    <string name="settings_pin_note">If you forget the PIN and this tablet has no screen lock, the only way back in is to clear the app\'s data, which erases everything.</string>
+    <string name="settings_pin_note">If you forget the PIN and this device has no screen lock, the only way back in is to clear the app\'s data, which erases everything.</string>
     <string name="settings_pinning">How to set up screen pinning</string>
     <string name="settings_less">Less</string>
     <string name="settings_more">More</string>
@@ -262,7 +262,7 @@
     <string name="about_title">About PuzzlePop</string>
     <string name="about_version">Version %1$s</string>
     <string name="about_privacy_title">Privacy</string>
-    <string name="about_privacy_body">PuzzlePop has no ads, no accounts and no analytics, and it can\'t use the internet. Your photos, puzzles, settings and PIN stay on this tablet in the app\'s own storage. They aren\'t backed up to the cloud, and uninstalling the app deletes them. Fingerprint checks are done by Android, so the app never sees your fingerprint.</string>
+    <string name="about_privacy_body">PuzzlePop has no ads, no accounts and no analytics, and it can\'t use the internet. Your photos, puzzles, settings and PIN stay on this device in the app\'s own storage. They aren\'t backed up to the cloud, and uninstalling the app deletes them. Fingerprint checks are done by Android, so the app never sees your fingerprint.</string>
     <string name="about_privacy_link">Read the full privacy policy</string>
     <string name="about_licenses_title">Open-source licenses</string>
     <string name="about_licenses_body">PuzzlePop is built with these open-source libraries, all under the Apache License 2.0:</string>
