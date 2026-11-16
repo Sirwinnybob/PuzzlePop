@@ -4,11 +4,13 @@
 Usage: python3 -I tools/store_art.py <raw-dir> <out-dir>
 
 <raw-dir> holds PNG screenshots straight from `adb exec-out screencap -p`, named as in CAPTIONS below
-(phone_*.png from a phone held sideways, tablet_*.png from a tablet in landscape). Missing ones are skipped.
+(phone_*.png from a phone held sideways, tablet_*.png from a Samsung 10-inch tablet in landscape, tablet7_*.png
+from a 7-inch tablet emulator in landscape). Missing ones are skipped.
 Writes to <out-dir>:
   feature-graphic.png   1024x500, the banner at the top of the listing
   phone-N.png           1920x1080 framed phone screenshots with a caption
-  tablet-N.png          2560x1440 framed tablet screenshots with a caption
+  tablet-N.png          2560x1440 framed 10-inch tablet screenshots with a caption
+  tablet7-N.png         2560x1440 framed 7-inch tablet screenshots with a caption
 The icon (icon-512.png) is rendered separately from tools/launcher-icon/preview.svg; see play-store/README.md.
 Needs Pillow and the Open Sans fonts (Fedora: open-sans-fonts).
 """
@@ -39,8 +41,17 @@ CAPTIONS = {
         ("tablet_kid_home.png", "Kid mode: big pictures and nothing else to tap"),
         ("tablet_settings.png", "Play-time limits, behind a grown-up PIN"),
     ],
+    # Captured on a Nexus 7 (2013) profile emulator: 1920x1200, 960x600 dp.
+    "tablet7": [
+        ("tablet7_play.png", "Turn your own photos into jigsaw puzzles"),
+        ("tablet7_sheet.png", "10 to 1000 pieces, eight piece shapes"),
+        ("tablet7_library.png", "Pick up right where you left off"),
+        ("tablet7_finish.png", "A big celebration for every finished puzzle"),
+        ("tablet7_kid_home.png", "Kid mode: big pictures and nothing else to tap"),
+        ("tablet7_settings.png", "Play-time limits, behind a grown-up PIN"),
+    ],
 }
-CANVAS = {"phone": (1920, 1080), "tablet": (2560, 1440)}  # Play wants 16:9 for tablet slots
+CANVAS = {"phone": (1920, 1080), "tablet": (2560, 1440), "tablet7": (2560, 1440)}  # Play wants 16:9 for tablet slots
 
 
 def sky(size):
@@ -74,8 +85,10 @@ def paste_with_shadow(canvas, shot, xy, radius):
     canvas.alpha_composite(rounded(shot, radius), xy)
 
 
-def status_bar_height(img):
+def status_bar_height(img, kind=None):
     """The system status bar at the top of a landscape screenshot; it is cut off."""
+    if kind == "tablet7":
+        return round(img.height * 0.05)
     return round(img.height * 0.085) if is_phone(img) else round(img.height * 0.045)
 
 
@@ -101,18 +114,21 @@ def hide_samsung_overlays(img):
     return Image.fromarray(fixed[:, :, ::-1])
 
 
-def bottom_cut(img):
-    """Samsung tablets show a taskbar of app icons along the bottom; that strip is cut off too."""
+def bottom_cut(img, kind=None):
+    """Samsung tablets show a taskbar of app icons along the bottom; that strip is cut off too. The emulator
+    only has the thin gesture-bar pill there."""
+    if kind == "tablet7":
+        return round(img.height * 0.04)
     return 0 if is_phone(img) else round(img.height * 0.07)
 
 
-def frame(raw_path, caption, size):
+def frame(raw_path, caption, size, kind):
     w, h = size
     canvas = sky(size).convert("RGBA")
     shot = Image.open(raw_path).convert("RGB")
-    if not is_phone(shot):
+    if kind == "tablet":
         shot = hide_samsung_overlays(shot)
-    shot = shot.crop((0, status_bar_height(shot), shot.width, shot.height - bottom_cut(shot)))
+    shot = shot.crop((0, status_bar_height(shot, kind), shot.width, shot.height - bottom_cut(shot, kind)))
     caption_h = round(h * 0.2)
     margin = round(w * 0.045)
     max_w, max_h = w - 2 * margin, h - caption_h - margin
@@ -163,7 +179,7 @@ def main():
             if not os.path.exists(path):
                 continue
             n += 1
-            frame(path, caption, CANVAS[kind]).save(os.path.join(out, f"{kind}-{n}.png"))
+            frame(path, caption, CANVAS[kind], kind).save(os.path.join(out, f"{kind}-{n}.png"))
             print(f"{kind}-{n}.png  <- {name}")
     icon = os.path.join(out, "icon-512.png")
     if os.path.exists(icon):

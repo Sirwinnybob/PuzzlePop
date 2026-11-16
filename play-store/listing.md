@@ -1,7 +1,7 @@
 # PuzzlePop on Google Play: listing and console answers
 
 Everything to paste into the Play Console for version 1.0, plus how each piece of art was made.
-The art is in this folder: `icon-512.png`, `feature-graphic.png`, `phone-*.png` and `tablet-*.png`.
+The art is in this folder: `icon-512.png`, `feature-graphic.png`, `phone-*.png`, `tablet-*.png` (10-inch) and `tablet7-*.png` (7-inch).
 
 ## Store settings
 
@@ -120,5 +120,9 @@ this was written with machine help; have a native speaker check it before you pu
 5. Run `python3 -I tools/store_art.py raw play-store` to frame the screenshots and build the feature graphic.
    For tablet shots it also cuts off Samsung's taskbar and inpaints the floating S Pen button and edge-panel
    handle (needs `python3-opencv`).
+6. The 7-inch shots (`tablet7_*.png`) come from an emulator: a Nexus 7 (2013) profile with the
+   `android-35;google_apis_tablet;x86_64` image (1920x1200, 960x600 dp), dark mode on, rotation locked to
+   landscape (`cmd window user-rotation lock 1`). The AVD `PuzzlePop_7in` is set up on the work PC.
 
-Upload `phone-*.png` as phone screenshots and `tablet-*.png` as both 7-inch and 10-inch tablet screenshots.
+Upload `phone-*.png` as phone screenshots, `tablet7-*.png` as 7-inch tablet screenshots and `tablet-*.png` as
+10-inch tablet screenshots.

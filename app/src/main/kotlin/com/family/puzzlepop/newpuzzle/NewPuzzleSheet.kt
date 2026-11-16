@@ -75,6 +75,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -504,7 +505,9 @@ private fun StyleTile(
             lineHeight = 16.sp,
             textAlign = TextAlign.Center,
             minLines = 2,
-            maxLines = 2,
+            // A third line for the narrow tiles on 7-inch tablets, where "Big and easy to grab" doesn't fit in two.
+            maxLines = 3,
+            overflow = TextOverflow.Ellipsis,
         )
     }
 }

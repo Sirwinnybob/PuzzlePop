@@ -24,8 +24,8 @@ android {
         applicationId = if (project.hasProperty("family")) "com.family.puzzlepop" else "io.github.sirwinnybob.puzzlepop"
         minSdk = 26
         targetSdk = 36
-        versionCode = 4
-        versionName = "1.0"
+        versionCode = 5
+        versionName = "1.0.1"
     }
 
     signingConfigs {
