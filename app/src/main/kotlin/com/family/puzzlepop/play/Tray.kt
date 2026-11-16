@@ -37,6 +37,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
@@ -398,6 +399,7 @@ fun TrayControls(
                     TrayButton(
                         f.second, stringResource(f.third.first), stringResource(f.third.second), bw,
                         selected = activeButton == i, plus = showPlus && activeButton == i,
+                        shape = trayButtonShape(layout.vertical, i),
                     ) {
                         onColorsOpen(false)
                         onFilter(f.first)
@@ -465,6 +467,21 @@ fun TrayControls(
 }
 
 private const val DOT_DP = 32 // touch cell; the dot itself is drawn smaller
+private const val TRAY_BUTTON_RADIUS_DP = 12f
+
+/**
+ * In landscape the top two buttons sit in the panel's rounded top corners, only a hair inside it, so their
+ * outer corner follows the panel's curve (its radius less that gap) instead of the usual 12 dp. In portrait
+ * the buttons sit well inside the panel's corners and keep 12 dp all round.
+ */
+private fun trayButtonShape(vertical: Boolean, index: Int): Shape {
+    val r = TRAY_BUTTON_RADIUS_DP.dp
+    if (!vertical || index > 1) return RoundedCornerShape(r)
+    val gap = (TRAY_THICKNESS_DP - 2 * TRAY_BUTTON_W_LANDSCAPE_DP - TRAY_BUTTON_GAP_DP) / 2 - PANEL_INSET_DP
+    val outer = (PANEL_RADIUS_DP - gap).coerceAtLeast(TRAY_BUTTON_RADIUS_DP).dp
+    return if (index == 0) RoundedCornerShape(topStart = outer, topEnd = r, bottomEnd = r, bottomStart = r)
+    else RoundedCornerShape(topStart = r, topEnd = outer, bottomEnd = r, bottomStart = r)
+}
 private const val PLUS_ONE_MS = 1200L
 
 /** A tray button: a colourful icon over a short label, highlighted while [selected]. [description] is for TalkBack. */
@@ -477,13 +494,14 @@ private fun TrayButton(
     selected: Boolean,
     plus: Boolean,
     iconTurn: Float = 0f,
+    shape: Shape = RoundedCornerShape(TRAY_BUTTON_RADIUS_DP.dp),
     onClick: () -> Unit,
 ) {
     val colors = MaterialTheme.colorScheme
     Surface(
         checked = selected,
         onCheckedChange = { onClick() },
-        shape = RoundedCornerShape(12.dp),
+        shape = shape,
         color = if (selected) colors.primaryContainer else Color.Transparent,
         border = if (selected) BorderStroke(2.dp, colors.primary) else null,
         modifier = Modifier.size(width, TRAY_BUTTON_H_DP.dp).semantics { contentDescription = description },
