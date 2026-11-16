@@ -8,7 +8,7 @@ Usage: python3 -I tools/store_art.py <raw-dir> <out-dir>
 Writes to <out-dir>:
   feature-graphic.png   1024x500, the banner at the top of the listing
   phone-N.png           1920x1080 framed phone screenshots with a caption
-  tablet-N.png          2560x1600 framed tablet screenshots with a caption
+  tablet-N.png          2560x1440 framed tablet screenshots with a caption
 The icon (icon-512.png) is rendered separately from tools/launcher-icon/preview.svg; see play-store/README.md.
 Needs Pillow and the Open Sans fonts (Fedora: open-sans-fonts).
 """
@@ -40,7 +40,7 @@ CAPTIONS = {
         ("tablet_settings.png", "Play-time limits, behind a grown-up PIN"),
     ],
 }
-CANVAS = {"phone": (1920, 1080), "tablet": (2560, 1600)}
+CANVAS = {"phone": (1920, 1080), "tablet": (2560, 1440)}  # Play wants 16:9 for tablet slots
 
 
 def sky(size):
