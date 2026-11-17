@@ -24,8 +24,8 @@ android {
         applicationId = if (project.hasProperty("family")) "com.family.puzzlepop" else "io.github.sirwinnybob.puzzlepop"
         minSdk = 26
         targetSdk = 36
-        versionCode = 5
-        versionName = "1.0.1"
+        versionCode = 6
+        versionName = "1.0.2"
     }
 
     signingConfigs {
@@ -85,6 +85,9 @@ dependencies {
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
+    // Compose pulls in graphics-path 1.0.1, whose native library was built with NDK r25c; Play flags that as a
+    // crash risk on 16 KB page-size devices. 1.1.0 is rebuilt with a current NDK.
+    implementation(libs.androidx.graphics.path)
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material3.windowsizeclass)
